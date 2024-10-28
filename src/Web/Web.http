@@ -3,7 +3,7 @@
 
 @Email=administrator@localhost
 @Password=Administrator1!
-@BearerToken=<YourToken>
+//@BearerToken=<YourToken>
 
 # POST Users Register
 POST {{Web_HostAddress}}/api/Users/Register
@@ -24,7 +24,7 @@ Content-Type: application/json
   "email": "{{Email}}",
   "password": "{{Password}}"
 }
-
+> {% client.global.set("BearerToken", response.body.accessToken) %}
 ###
 
 # POST Users Refresh
