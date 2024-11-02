@@ -6,7 +6,7 @@ namespace GerPros_Backend_API.Application.Products.Queries.GetProductsWithPagina
 
 public record GetProductWithPaginationQuery : IRequest<PaginatedList<ProductBriefDto>>
 {
-    public int ListId { get; init; }
+    public Guid ListId { get; init; }
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
 }

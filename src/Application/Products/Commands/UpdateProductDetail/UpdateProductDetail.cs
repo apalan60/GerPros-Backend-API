@@ -6,9 +6,9 @@ namespace GerPros_Backend_API.Application.Products.Commands.UpdateProductDetail;
 
 public record UpdateProductDetailCommand : IRequest
 {
-    public int Id { get; init; }
+    public Guid Id { get; init; }
 
-    public int ListId { get; init; }
+    public Guid ListId { get; init; }
 
     public PriorityLevel Priority { get; init; }
 

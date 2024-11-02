@@ -2,15 +2,19 @@
 
 public class ProductItem : BaseAuditableEntity
 {
-    public int ListId { get; set; }
+    public Guid ListId { get; init; }
 
-    public string? Title { get; set; }
+    public string? Brand { get; init; }
 
-    public string? Note { get; set; }
+    public string? Series { get; init; }
 
-    public PriorityLevel Priority { get; set; }
+    public string? Name { get; init; }
 
-    public DateTime? Reminder { get; set; }
+    public decimal Price { get; init; }
+
+    public string? Image { get; init; }
+
+    public string? Detail { get; init; }
 
     private bool _done;
     public bool Done
@@ -27,5 +31,5 @@ public class ProductItem : BaseAuditableEntity
         }
     }
 
-    public TodoList List { get; set; } = null!;
+    public ProductList List { get; set; } = null!;
 }

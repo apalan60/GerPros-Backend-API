@@ -14,6 +14,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<TodoList> TodoLists => Set<TodoList>();
 
     public DbSet<TodoItem> TodoItems => Set<TodoItem>();
+    
+    public DbSet<ProductList> ProductLists => Set<ProductList>();
+    public DbSet<ProductItem> ProductItems => Set<ProductItem>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

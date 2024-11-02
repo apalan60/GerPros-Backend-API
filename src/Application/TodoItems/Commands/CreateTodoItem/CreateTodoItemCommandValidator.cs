@@ -1,6 +1,6 @@
 ﻿namespace GerPros_Backend_API.Application.TodoItems.Commands.CreateTodoItem;
 
-public class CreateTodoItemCommandValidator : AbstractValidator<CreateTodoItemCommand>
+public class CreateTodoItemCommandValidator : AbstractValidator<CreateProductItemCommand>
 {
     public CreateTodoItemCommandValidator()
     {
