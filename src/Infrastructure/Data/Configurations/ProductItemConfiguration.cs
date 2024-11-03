@@ -8,5 +8,7 @@ public class ProductItemConfiguration : IEntityTypeConfiguration<ProductItem>
 {
     public void Configure(EntityTypeBuilder<ProductItem> builder)
     {
+        builder.Property(p => p.Price)
+            .HasPrecision(18, 2);
     }
 }
