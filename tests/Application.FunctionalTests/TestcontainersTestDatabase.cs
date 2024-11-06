@@ -4,6 +4,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Respawn;
 using Testcontainers.MsSql;
+using Testcontainers.PostgreSql;
 
 namespace GerPros_Backend_API.Application.FunctionalTests;
 
