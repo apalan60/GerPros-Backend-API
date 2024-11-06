@@ -39,7 +39,6 @@
     </Exec>
 
     <Message Text="$(NSwagOutput)" Condition="'$(NSw&#xD;&#xA;    agExitCode)' == '0'" Importance="low" />
-    <Error Text="$(NSwagOutput)" Condition="'$(NSwagExitCode)' != '0'" />
   </Target>
 
 </Project>
