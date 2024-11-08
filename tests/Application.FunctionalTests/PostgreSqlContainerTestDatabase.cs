@@ -7,9 +7,9 @@ namespace GerPros_Backend_API.Application.FunctionalTests;
 public class PostgreSqlContainerTestDatabase : ITestDatabase
 {
     private readonly PostgreSqlContainer _postgreSqlContainer = new PostgreSqlBuilder()
-        .WithDatabase("TestDatabase")
-        .WithUsername("testuser")
-        .WithPassword("testpassword")
+        .WithDatabase("GerPros_Backend_APITestDb")
+        .WithUsername("TestUser")
+        .WithPassword("TestUser123")
         .Build();
 
     private string ConnectionString => _postgreSqlContainer.GetConnectionString();
