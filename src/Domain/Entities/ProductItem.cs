@@ -2,34 +2,20 @@
 
 public class ProductItem : BaseAuditableEntity
 {
-    public Guid ListId { get; init; }
+    public Guid BrandId { get; set; }
 
-    public string? Brand { get; init; }
+    public Guid SeriesId { get; set; }
 
-    public string? Series { get; init; }
+    public string? Name { get; set; }
 
-    public string? Name { get; init; }
+    public decimal Price { get; set; }
 
-    public decimal Price { get; init; }
+    public string? Image { get; set; }
 
-    public string? Image { get; init; }
+    public string? Detail { get; set; }
 
-    public string? Detail { get; init; }
-
-    private bool _done;
-    public bool Done
-    {
-        get => _done;
-        set
-        {
-            if (value && !_done)
-            {
-                AddDomainEvent(new ProductItemCompletedEvent(this));
-            }
-
-            _done = value;
-        }
-    }
-
-    public ProductList List { get; set; } = null!;
+    public Brand Brand { get; init; } = null!;
+    
+    public Series Series { get; init; } = null!;
+    
 }

@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace GerPros_Backend_API.Application.Products.EventHandlers;
 
-public class ProductCompletedEventHandler : INotificationHandler<TodoItemCompletedEvent>
+public class ProductCompletedEventHandler : INotificationHandler<ProductItemCreatedEvent>
 {
     private readonly ILogger<TodoItemCompletedEventHandler> _logger;
 
@@ -13,7 +13,7 @@ public class ProductCompletedEventHandler : INotificationHandler<TodoItemComplet
         _logger = logger;
     }
 
-    public Task Handle(TodoItemCompletedEvent notification, CancellationToken cancellationToken)
+    public  Task Handle(ProductItemCreatedEvent notification, CancellationToken cancellationToken)
     {
         _logger.LogInformation("GerPros_Backend_API Domain Event: {DomainEvent}", notification.GetType().Name);
 

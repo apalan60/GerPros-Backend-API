@@ -1,4 +1,5 @@
-﻿using GerPros_Backend_API.Application.TodoLists.Queries.GetTodos;
+﻿using GerPros_Backend_API.Application.Products.Queries.GetProductsWithPagination;
+using GerPros_Backend_API.Application.TodoLists.Queries.GetTodos;
 using GerPros_Backend_API.Domain.Entities;
 using GerPros_Backend_API.Domain.ValueObjects;
 
@@ -8,18 +9,6 @@ using static Testing;
 
 public class GetProductsTests : BaseTestFixture
 {
-    [Test]
-    public async Task ShouldReturnPriorityLevels()
-    {
-        await RunAsDefaultUserAsync();
-
-        var query = new GetTodosQuery();
-
-        var result = await SendAsync(query);
-
-        result.PriorityLevels.Should().NotBeEmpty();
-    }
-
     [Test]
     public async Task ShouldReturnAllListsAndItems()
     {

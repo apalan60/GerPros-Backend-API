@@ -1,18 +1,25 @@
 ﻿using GerPros_Backend_API.Application.Common.Interfaces;
-using GerPros_Backend_API.Application.TodoItems.Commands.UpdateTodoItem;
 
 namespace GerPros_Backend_API.Application.Products.Commands.UpdateProduct;
 
 public record UpdateProductCommand : IRequest
 {
-    public int Id { get; init; }
+    public Guid Id { get; set; }
+    
+    public Guid? BrandId { get; init; }
 
-    public string? Title { get; init; }
+    public Guid? SeriesId { get; init; }
+    
+    public string? Name { get; init; }
 
-    public bool Done { get; init; }
+    public decimal? Price { get; init; }
+
+    public string? Image { get; init; }
+
+    public string? Detail { get; init; }
 }
 
-public class UpdateProductCommandHandler : IRequestHandler<UpdateTodoItemCommand>
+public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
 {
     private readonly IApplicationDbContext _context;
 
@@ -21,15 +28,18 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateTodoItemCommand
         _context = context;
     }
 
-    public async Task Handle(UpdateTodoItemCommand request, CancellationToken cancellationToken)
+    public async Task Handle(UpdateProductCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.TodoItems
-            .FindAsync(new object[] { request.Id }, cancellationToken);
-
+        var entity = await _context.ProductItems
+            .FindAsync([request.Id], cancellationToken);
         Guard.Against.NotFound(request.Id, entity);
 
-        entity.Title = request.Title;
-        entity.Done = request.Done;
+        entity.BrandId = request.BrandId ?? entity.BrandId;
+        entity.SeriesId = request.SeriesId ?? entity.SeriesId;
+        entity.Name = request.Name ?? entity.Name;
+        entity.Price = request.Price ?? entity.Price;
+        entity.Image = request.Image ?? entity.Image;
+        entity.Detail = request.Detail ?? entity.Detail;
 
         await _context.SaveChangesAsync(cancellationToken);
     }

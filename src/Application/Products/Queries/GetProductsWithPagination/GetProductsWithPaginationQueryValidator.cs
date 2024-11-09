@@ -6,9 +6,6 @@ public class GetProductsWithPaginationQueryValidator : AbstractValidator<GetTodo
 {
     public GetProductsWithPaginationQueryValidator()
     {
-        RuleFor(x => x.ListId)
-            .NotEmpty().WithMessage("ListId is required.");
-
         RuleFor(x => x.PageNumber)
             .GreaterThanOrEqualTo(1).WithMessage("PageNumber at least greater than or equal to 1.");
 

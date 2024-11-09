@@ -6,7 +6,17 @@ namespace GerPros_Backend_API.Application.Products.Commands.CreateProduct;
 
 public record CreateProductItemCommand : IRequest<Guid>
 {
-    
+    public Guid BrandId { get; init; }
+
+    public Guid SeriesId { get; init; }
+
+    public string Name { get; init; } = null!;
+
+    public decimal Price { get; init; }
+
+    public string? Image { get; init; }
+
+    public string? Detail { get; init; }
 }
 
 public class CreateProductItemCommandHandler : IRequestHandler<CreateProductItemCommand, Guid>
@@ -20,7 +30,16 @@ public class CreateProductItemCommandHandler : IRequestHandler<CreateProductItem
 
     public async Task<Guid> Handle(CreateProductItemCommand request, CancellationToken cancellationToken)
     {
-        var entity = new ProductItem { };
+        var entity = new ProductItem
+        {
+            Id = new Guid(),
+            BrandId = request.BrandId,
+            SeriesId = request.SeriesId,
+            Name = request.Name,
+            Price = request.Price,
+            Image = request.Image,
+            Detail = request.Detail
+        };
         
         entity.AddDomainEvent(new ProductItemCreatedEvent(entity));
 

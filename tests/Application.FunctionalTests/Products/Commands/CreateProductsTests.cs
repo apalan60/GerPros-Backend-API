@@ -1,4 +1,5 @@
 ﻿using GerPros_Backend_API.Application.Common.Exceptions;
+using GerPros_Backend_API.Application.Products.Commands.CreateProduct;
 using GerPros_Backend_API.Application.TodoLists.Commands.CreateTodoList;
 using GerPros_Backend_API.Domain.Entities;
 
@@ -11,7 +12,7 @@ public class CreateProductsTests : BaseTestFixture
     [Test]
     public async Task ShouldRequireMinimumFields()
     {
-        var command = new CreateTodoListCommand();
+        var command = new CreateProductItemCommand();
         await FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<ValidationException>();
     }
 
@@ -33,7 +34,7 @@ public class CreateProductsTests : BaseTestFixture
     }
 
     [Test]
-    public async Task ShouldCreateTodoList()
+    public async Task ShouldCreateProduct()
     {
         var userId = await RunAsDefaultUserAsync();
 

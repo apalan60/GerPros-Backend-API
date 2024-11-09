@@ -4,30 +4,45 @@ using GerPros_Backend_API.Application.Common.Models;
 
 namespace GerPros_Backend_API.Application.Products.Queries.GetProductsWithPagination;
 
-public record GetProductWithPaginationQuery : IRequest<PaginatedList<ProductBriefDto>>
+public record GetProductWithPaginationQuery : IRequest<PaginatedList<ProductItemDto>>
 {
-    public Guid ListId { get; init; }
+    public Guid? BrandId { get; init; }
+    public Guid? SeriesId { get; init; }
+    public string? Brand { get; init; }
+    public string? Series { get; init; }
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
 }
 
-public class GetProductsWithPaginationQueryHandler : IRequestHandler<GetProductWithPaginationQuery, PaginatedList<ProductBriefDto>>
+public class GetProductsWithPaginationQueryHandler : IRequestHandler<GetProductWithPaginationQuery, PaginatedList<ProductItemDto>>
 {
     private readonly IApplicationDbContext _context;
-    private readonly IMapper _mapper;
 
-    public GetProductsWithPaginationQueryHandler(IApplicationDbContext context, IMapper mapper)
+    public GetProductsWithPaginationQueryHandler(IApplicationDbContext context)
     {
         _context = context;
-        _mapper = mapper;
     }
 
-    public async Task<PaginatedList<ProductBriefDto>> Handle(GetProductWithPaginationQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<ProductItemDto>> Handle(GetProductWithPaginationQuery request, CancellationToken cancellationToken)
     {
-        return await _context.TodoItems
-            .Where(x => x.ListId == request.ListId)
-            .OrderBy(x => x.Title)
-            .ProjectTo<ProductBriefDto>(_mapper.ConfigurationProvider)
-            .PaginatedListAsync(request.PageNumber, request.PageSize);
+        PaginatedList<ProductItemDto> products = request switch
+        {
+            { BrandId: not null, SeriesId: not null } => await _context.ProductItems.Include(x => x.Brand)
+                .Include(x => x.Series)
+                .Where(x => x.BrandId == request.BrandId && x.SeriesId == request.SeriesId)
+                .Select(x => x.ToDto())
+                .PaginatedListAsync(request.PageNumber, request.PageSize),
+            
+            { Brand: not null, Series: not null } => await _context.ProductItems.Include(x => x.Brand)
+                .Include(x => x.Series)
+                .Where(x => x.Brand.Name == request.Brand && x.Series.Name == request.Series)
+                .Select(x => x.ToDto())
+                .PaginatedListAsync(request.PageNumber, request.PageSize),
+            
+            _ => throw new Exception(
+                "Invalid query parameters, please provide either BrandId and SeriesId or Brand and Series")
+        };
+
+        return products;
     }
 }
