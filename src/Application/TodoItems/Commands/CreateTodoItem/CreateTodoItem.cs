@@ -4,14 +4,14 @@ using GerPros_Backend_API.Domain.Events;
 
 namespace GerPros_Backend_API.Application.TodoItems.Commands.CreateTodoItem;
 
-public record CreateProductItemCommand : IRequest<Guid>
+public record CreateTodoItemCommand : IRequest<Guid>
 {
     public Guid ListId { get; init; }
 
     public string? Title { get; init; }
 }
 
-public class CreateTodoItemCommandHandler : IRequestHandler<CreateProductItemCommand, Guid>
+public class CreateTodoItemCommandHandler : IRequestHandler<CreateTodoItemCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
 
@@ -20,7 +20,7 @@ public class CreateTodoItemCommandHandler : IRequestHandler<CreateProductItemCom
         _context = context;
     }
 
-    public async Task<Guid> Handle(CreateProductItemCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(CreateTodoItemCommand request, CancellationToken cancellationToken)
     {
         var entity = new TodoItem
         {

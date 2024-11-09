@@ -25,7 +25,7 @@ public class TodoItems : EndpointGroupBase
         return sender.Send(query);
     }
 
-    public Task<Guid> CreateTodoItem(ISender sender, CreateProductItemCommand command)
+    public Task<Guid> CreateTodoItem(ISender sender, CreateTodoItemCommand command)
     {
         return sender.Send(command);
     }

@@ -26,7 +26,7 @@ public class DeleteTodoItemTests : BaseTestFixture
             Title = "New List"
         });
 
-        var itemId = await SendAsync(new CreateProductItemCommand
+        var itemId = await SendAsync(new CreateTodoItemCommand
         {
             ListId = listId,
             Title = "New Item"
