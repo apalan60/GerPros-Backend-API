@@ -1,6 +1,7 @@
 ﻿# TODO
 
 - Complete the `ProductItem` test case.
+  - *relation "BrandSeries" does not exist*
 
 ## Note
 
