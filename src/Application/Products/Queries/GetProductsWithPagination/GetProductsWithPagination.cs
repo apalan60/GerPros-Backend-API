@@ -28,14 +28,14 @@ public class GetProductsWithPaginationQueryHandler : IRequestHandler<GetProductW
         PaginatedList<ProductItemDto> products = request switch
         {
             { BrandId: not null, SeriesId: not null } => await _context.ProductItems.Include(x => x.Brand)
-                .Include(x => x.Series)
+                .Include(x => x.BrandSeries)
                 .Where(x => x.BrandId == request.BrandId && x.SeriesId == request.SeriesId)
                 .Select(x => x.ToDto())
                 .PaginatedListAsync(request.PageNumber, request.PageSize),
             
             { Brand: not null, Series: not null } => await _context.ProductItems.Include(x => x.Brand)
-                .Include(x => x.Series)
-                .Where(x => x.Brand.Name == request.Brand && x.Series.Name == request.Series)
+                .Include(x => x.BrandSeries)
+                .Where(x => x.Brand.Name == request.Brand && x.BrandSeries.Name == request.Series)
                 .Select(x => x.ToDto())
                 .PaginatedListAsync(request.PageNumber, request.PageSize),
             

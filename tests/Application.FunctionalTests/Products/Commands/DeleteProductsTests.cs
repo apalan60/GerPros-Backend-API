@@ -2,7 +2,7 @@
 using GerPros_Backend_API.Application.TodoLists.Commands.DeleteTodoList;
 using GerPros_Backend_API.Domain.Entities;
 
-namespace GerPros_Backend_API.Application.FunctionalTests.TodoLists.Commands;
+namespace GerPros_Backend_API.Application.FunctionalTests.Products.Commands;
 
 using static Testing;
 

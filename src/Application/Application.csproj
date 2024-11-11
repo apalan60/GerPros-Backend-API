@@ -16,9 +16,4 @@
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Brands\" />
-    <Folder Include="Series\" />
-  </ItemGroup>
-
 </Project>

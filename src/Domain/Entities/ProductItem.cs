@@ -16,6 +16,6 @@ public class ProductItem : BaseAuditableEntity
 
     public Brand Brand { get; init; } = null!;
     
-    public Series Series { get; init; } = null!;
+    public BrandSeries BrandSeries { get; init; } = null!;
     
 }

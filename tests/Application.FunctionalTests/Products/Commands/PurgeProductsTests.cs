@@ -4,7 +4,7 @@ using GerPros_Backend_API.Application.TodoLists.Commands.CreateTodoList;
 using GerPros_Backend_API.Application.TodoLists.Commands.PurgeTodoLists;
 using GerPros_Backend_API.Domain.Entities;
 
-namespace GerPros_Backend_API.Application.FunctionalTests.TodoLists.Commands;
+namespace GerPros_Backend_API.Application.FunctionalTests.Products.Commands;
 
 using static Testing;
 

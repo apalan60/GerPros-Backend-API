@@ -30,6 +30,12 @@ public class CreateProductItemCommandHandler : IRequestHandler<CreateProductItem
 
     public async Task<Guid> Handle(CreateProductItemCommand request, CancellationToken cancellationToken)
     {
+        var brand = await _context.Brands.FindAsync([request.BrandId], cancellationToken);
+        Guard.Against.NotFound(request.BrandId, brand);
+        
+        var series = await _context.BrandSeries.FindAsync([request.SeriesId], cancellationToken);
+        Guard.Against.NotFound(request.SeriesId, series);
+        
         var entity = new ProductItem
         {
             Id = new Guid(),

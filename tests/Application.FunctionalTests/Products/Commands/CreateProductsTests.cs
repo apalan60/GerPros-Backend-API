@@ -1,6 +1,7 @@
-﻿using GerPros_Backend_API.Application.Common.Exceptions;
+﻿using GerPros_Backend_API.Application.Brands.Commands.CreateBrand;
+using GerPros_Backend_API.Application.Common.Exceptions;
 using GerPros_Backend_API.Application.Products.Commands.CreateProduct;
-using GerPros_Backend_API.Application.TodoLists.Commands.CreateTodoList;
+using GerPros_Backend_API.Application.Series.Commands.CraeteSeries;
 using GerPros_Backend_API.Domain.Entities;
 
 namespace GerPros_Backend_API.Application.FunctionalTests.Products.Commands;
@@ -17,16 +18,13 @@ public class CreateProductsTests : BaseTestFixture
     }
 
     [Test]
-    public async Task ShouldRequireUniqueTitle()
+    public async Task ShouldRequireName()
     {
-        await SendAsync(new CreateTodoListCommand
+        var command = new CreateProductItemCommand
         {
-            Title = "Shopping"
-        });
-
-        var command = new CreateTodoListCommand
-        {
-            Title = "Shopping"
+            BrandId = Guid.NewGuid(),
+            SeriesId = Guid.NewGuid(),
+            Price = 1.23m
         };
 
         await FluentActions.Invoking(() =>
@@ -34,21 +32,51 @@ public class CreateProductsTests : BaseTestFixture
     }
 
     [Test]
+    public async Task ShouldCreateBrandSeriesFirst()
+    {
+        var command = new CreateProductItemCommand
+        {
+            BrandId = Guid.NewGuid(),
+            SeriesId = Guid.NewGuid(),
+            Name = "Product Name",
+            Price = 1.23m
+        };
+
+        await FluentActions.Invoking(() =>
+            SendAsync(command)).Should().ThrowAsync<NotFoundException>();
+    }
+    
+    [Test]
     public async Task ShouldCreateProduct()
     {
         var userId = await RunAsDefaultUserAsync();
-
-        var command = new CreateTodoListCommand
+        
+        var brandId = await SendAsync(new CreateBrandCommand
         {
-            Title = "Tasks"
+            Name = "Brand Name"
+        });
+        
+        var seriesId = await SendAsync(new CreateBrandSeriesCommand
+        {
+            BrandId = brandId,
+            Name = "Series Name"
+        });
+
+        var command = new CreateProductItemCommand
+        {
+            BrandId = brandId,
+            SeriesId = seriesId,
+            Name = "Product Name",
+            Price = 1.23m
         };
 
         var id = await SendAsync(command);
 
-        var list = await FindAsync<TodoList>(id);
+        var list = await FindAsync<ProductItem>(id);
 
         list.Should().NotBeNull();
-        list!.Title.Should().Be(command.Title);
+        list!.Name.Should().Be(command.Name);
+        list.Price.Should().Be(command.Price);
         list.CreatedBy.Should().Be(userId);
         list.Created.Should().BeCloseTo(DateTime.Now, TimeSpan.FromMilliseconds(10000));
     }

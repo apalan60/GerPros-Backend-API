@@ -1006,7 +1006,7 @@
             "$ref": "#/components/schemas/Brand"
           },
           "series": {
-            "$ref": "#/components/schemas/Series"
+            "$ref": "#/components/schemas/BrandSeries"
           }
         }
       },
@@ -1021,6 +1021,35 @@
             "properties": {
               "name": {
                 "type": "string"
+              },
+              "brandSeries": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/BrandSeries"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "BrandSeries": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseAuditableEntity"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "brandId": {
+                "type": "string",
+                "format": "guid"
+              },
+              "brand": {
+                "$ref": "#/components/schemas/Brand"
               }
             }
           }
@@ -1077,22 +1106,6 @@
         "type": "object",
         "x-abstract": true,
         "additionalProperties": false
-      },
-      "Series": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/BaseAuditableEntity"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "name": {
-                "type": "string"
-              }
-            }
-          }
-        ]
       },
       "CreateProductItemCommand": {
         "type": "object",
