@@ -10,5 +10,10 @@ public class ProductItemConfiguration : IEntityTypeConfiguration<ProductItem>
     {
         builder.Property(p => p.Price)
             .HasPrecision(18, 2);
+        
+        builder.HasOne(p => p.BrandSeries)
+            .WithMany(b => b.ProductItems)
+            .HasForeignKey(p => p.SeriesId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

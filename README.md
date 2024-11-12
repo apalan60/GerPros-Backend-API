@@ -54,9 +54,34 @@ To run the tests:
 dotnet test
 ```
 
+## Database
+- quick test database login using psql 
+```shell
+& "C:\Program Files\PostgreSQL\17\bin\psql.exe" -h localhost -p 54310 -U TestUser -d GerPros_Backend_APITestDb
+```
+
 ## Migration
+
 ```bash
 dotnet ef migrations add "SampleMigration" --project src\Infrastructure --startup-project src\Web --output-dir Data\Migrations`
+```
+
+```bash
+dotnet ef database update --project src\Infrastructure --startup-project src\Web
+```
+
+- To drop all tables in the database, run the following script in the psql:
+```postgresql
+DO $$ 
+DECLARE 
+    r RECORD; 
+BEGIN 
+    FOR r IN (SELECT tablename FROM pg_tables WHERE schemaname = current_schema()) 
+    LOOP 
+        EXECUTE 'DROP TABLE IF EXISTS ' || quote_ident(r.tablename) || ' CASCADE'; 
+    END LOOP; 
+END $$;
+
 ```
 
 ## Help

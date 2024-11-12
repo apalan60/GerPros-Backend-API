@@ -15,7 +15,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
 
     public DbSet<TodoItem> TodoItems => Set<TodoItem>();
     
-    public DbSet<ProductList> ProductLists => Set<ProductList>();
     public DbSet<ProductItem> ProductItems => Set<ProductItem>();
     public DbSet<Brand> Brands => Set<Brand>();
     public DbSet<BrandSeries> BrandSeries => Set<BrandSeries>();

@@ -93,12 +93,6 @@ namespace GerPros_Backend_API.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("BrandId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("BrandSeriesId")
-                        .HasColumnType("uuid");
-
                     b.Property<DateTimeOffset>("Created")
                         .HasColumnType("timestamp with time zone");
 
@@ -124,44 +118,14 @@ namespace GerPros_Backend_API.Infrastructure.Data.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("numeric(18,2)");
 
-                    b.Property<Guid?>("ProductListId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid>("SeriesId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BrandId");
-
-                    b.HasIndex("BrandSeriesId");
-
-                    b.HasIndex("ProductListId");
+                    b.HasIndex("SeriesId");
 
                     b.ToTable("ProductItems");
-                });
-
-            modelBuilder.Entity("GerPros_Backend_API.Domain.Entities.ProductList", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTimeOffset>("Created")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("LastModified")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ProductLists");
                 });
 
             modelBuilder.Entity("GerPros_Backend_API.Domain.Entities.TodoItem", b =>
@@ -446,23 +410,11 @@ namespace GerPros_Backend_API.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("GerPros_Backend_API.Domain.Entities.ProductItem", b =>
                 {
-                    b.HasOne("GerPros_Backend_API.Domain.Entities.Brand", "Brand")
-                        .WithMany()
-                        .HasForeignKey("BrandId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("GerPros_Backend_API.Domain.Entities.BrandSeries", "BrandSeries")
-                        .WithMany()
-                        .HasForeignKey("BrandSeriesId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithMany("ProductItems")
+                        .HasForeignKey("SeriesId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("GerPros_Backend_API.Domain.Entities.ProductList", null)
-                        .WithMany("Items")
-                        .HasForeignKey("ProductListId");
-
-                    b.Navigation("Brand");
 
                     b.Navigation("BrandSeries");
                 });
@@ -557,9 +509,9 @@ namespace GerPros_Backend_API.Infrastructure.Data.Migrations
                     b.Navigation("BrandSeries");
                 });
 
-            modelBuilder.Entity("GerPros_Backend_API.Domain.Entities.ProductList", b =>
+            modelBuilder.Entity("GerPros_Backend_API.Domain.Entities.BrandSeries", b =>
                 {
-                    b.Navigation("Items");
+                    b.Navigation("ProductItems");
                 });
 
             modelBuilder.Entity("GerPros_Backend_API.Domain.Entities.TodoList", b =>

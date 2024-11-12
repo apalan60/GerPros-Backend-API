@@ -10,7 +10,7 @@ public class PostgreSqlContainerTestDatabase : ITestDatabase
         .WithDatabase("GerPros_Backend_APITestDb")
         .WithUsername("TestUser")
         .WithPassword("TestUser123")
-        .WithExposedPort(55868)
+        .WithPortBinding(55868, 5432)
         .Build();
 
     private string ConnectionString => _postgreSqlContainer.GetConnectionString();

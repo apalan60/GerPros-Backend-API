@@ -27,15 +27,17 @@ public class GetProductsWithPaginationQueryHandler : IRequestHandler<GetProductW
     {
         PaginatedList<ProductItemDto> products = request switch
         {
-            { BrandId: not null, SeriesId: not null } => await _context.ProductItems.Include(x => x.Brand)
+            { BrandId: not null, SeriesId: not null } => await _context.ProductItems
                 .Include(x => x.BrandSeries)
-                .Where(x => x.BrandId == request.BrandId && x.SeriesId == request.SeriesId)
+                .ThenInclude(x => x.Brand)
+                .Where(x =>  x.SeriesId == request.SeriesId)
                 .Select(x => x.ToDto())
                 .PaginatedListAsync(request.PageNumber, request.PageSize),
             
-            { Brand: not null, Series: not null } => await _context.ProductItems.Include(x => x.Brand)
+            { Brand: not null, Series: not null } => await _context.ProductItems
                 .Include(x => x.BrandSeries)
-                .Where(x => x.Brand.Name == request.Brand && x.BrandSeries.Name == request.Series)
+                .ThenInclude(x => x.Brand)
+                .Where(x => x.BrandSeries.Brand.Name == request.Brand && x.BrandSeries.Name == request.Series)
                 .Select(x => x.ToDto())
                 .PaginatedListAsync(request.PageNumber, request.PageSize),
             

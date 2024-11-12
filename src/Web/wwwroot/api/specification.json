@@ -1050,6 +1050,48 @@
               },
               "brand": {
                 "$ref": "#/components/schemas/Brand"
+              },
+              "productItems": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ProductItem"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ProductItem": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseAuditableEntity"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "seriesId": {
+                "type": "string",
+                "format": "guid"
+              },
+              "name": {
+                "type": "string",
+                "nullable": true
+              },
+              "price": {
+                "type": "number",
+                "format": "decimal"
+              },
+              "image": {
+                "type": "string",
+                "nullable": true
+              },
+              "detail": {
+                "type": "string",
+                "nullable": true
+              },
+              "brandSeries": {
+                "$ref": "#/components/schemas/BrandSeries"
               }
             }
           }
@@ -1143,11 +1185,6 @@
           "id": {
             "type": "string",
             "format": "guid"
-          },
-          "brandId": {
-            "type": "string",
-            "format": "guid",
-            "nullable": true
           },
           "seriesId": {
             "type": "string",

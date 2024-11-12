@@ -6,8 +6,6 @@ public record UpdateProductCommand : IRequest
 {
     public Guid Id { get; set; }
     
-    public Guid? BrandId { get; init; }
-
     public Guid? SeriesId { get; init; }
     
     public string? Name { get; init; }
@@ -34,7 +32,6 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
             .FindAsync([request.Id], cancellationToken);
         Guard.Against.NotFound(request.Id, entity);
 
-        entity.BrandId = request.BrandId ?? entity.BrandId;
         entity.SeriesId = request.SeriesId ?? entity.SeriesId;
         entity.Name = request.Name ?? entity.Name;
         entity.Price = request.Price ?? entity.Price;

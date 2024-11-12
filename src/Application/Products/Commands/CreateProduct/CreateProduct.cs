@@ -33,13 +33,14 @@ public class CreateProductItemCommandHandler : IRequestHandler<CreateProductItem
         var brand = await _context.Brands.FindAsync([request.BrandId], cancellationToken);
         Guard.Against.NotFound(request.BrandId, brand);
         
-        var series = await _context.BrandSeries.FindAsync([request.SeriesId], cancellationToken);
+        var series = await _context.BrandSeries
+            .Where(s => s.Id == request.SeriesId && s.BrandId == request.BrandId)
+            .FirstOrDefaultAsync(cancellationToken);
         Guard.Against.NotFound(request.SeriesId, series);
         
         var entity = new ProductItem
         {
             Id = new Guid(),
-            BrandId = request.BrandId,
             SeriesId = request.SeriesId,
             Name = request.Name,
             Price = request.Price,

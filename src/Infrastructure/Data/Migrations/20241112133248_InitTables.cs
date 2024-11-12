@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GerPros_Backend_API.Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class InitTables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -52,10 +52,11 @@ namespace GerPros_Backend_API.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductLists",
+                name: "Brands",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
                     Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -63,7 +64,7 @@ namespace GerPros_Backend_API.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductLists", x => x.Id);
+                    table.PrimaryKey("PK_Brands", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -190,18 +191,12 @@ namespace GerPros_Backend_API.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductItems",
+                name: "BrandSeries",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ListId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Brand = table.Column<string>(type: "text", nullable: true),
-                    Series = table.Column<string>(type: "text", nullable: true),
-                    Name = table.Column<string>(type: "text", nullable: true),
-                    Price = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
-                    Image = table.Column<string>(type: "text", nullable: true),
-                    Detail = table.Column<string>(type: "text", nullable: true),
-                    Done = table.Column<bool>(type: "boolean", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    BrandId = table.Column<Guid>(type: "uuid", nullable: false),
                     Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -209,11 +204,11 @@ namespace GerPros_Backend_API.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductItems", x => x.Id);
+                    table.PrimaryKey("PK_BrandSeries", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProductItems_ProductLists_ListId",
-                        column: x => x.ListId,
-                        principalTable: "ProductLists",
+                        name: "FK_BrandSeries_Brands_BrandId",
+                        column: x => x.BrandId,
+                        principalTable: "Brands",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -243,6 +238,32 @@ namespace GerPros_Backend_API.Infrastructure.Data.Migrations
                         principalTable: "TodoLists",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductItems",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    SeriesId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Price = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
+                    Image = table.Column<string>(type: "text", nullable: true),
+                    Detail = table.Column<string>(type: "text", nullable: true),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductItems_BrandSeries_SeriesId",
+                        column: x => x.SeriesId,
+                        principalTable: "BrandSeries",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -283,9 +304,26 @@ namespace GerPros_Backend_API.Infrastructure.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductItems_ListId",
+                name: "IX_Brands_Name",
+                table: "Brands",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BrandSeries_BrandId",
+                table: "BrandSeries",
+                column: "BrandId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BrandSeries_Name",
+                table: "BrandSeries",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductItems_SeriesId",
                 table: "ProductItems",
-                column: "ListId");
+                column: "SeriesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TodoItems_ListId",
@@ -324,10 +362,13 @@ namespace GerPros_Backend_API.Infrastructure.Data.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "ProductLists");
+                name: "BrandSeries");
 
             migrationBuilder.DropTable(
                 name: "TodoLists");
+
+            migrationBuilder.DropTable(
+                name: "Brands");
         }
     }
 }

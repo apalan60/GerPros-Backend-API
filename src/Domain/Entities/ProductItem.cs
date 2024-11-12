@@ -2,8 +2,9 @@
 
 public class ProductItem : BaseAuditableEntity
 {
-    public Guid BrandId { get; set; }
-
+    /// <summary>
+    /// foreign key
+    /// </summary>
     public Guid SeriesId { get; set; }
 
     public string? Name { get; set; }
@@ -13,8 +14,6 @@ public class ProductItem : BaseAuditableEntity
     public string? Image { get; set; }
 
     public string? Detail { get; set; }
-
-    public Brand Brand { get; init; } = null!;
     
     public BrandSeries BrandSeries { get; init; } = null!;
     
