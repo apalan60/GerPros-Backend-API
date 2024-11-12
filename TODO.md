@@ -1,7 +1,6 @@
 ﻿# TODO
 
-- Complete the `ProductItem` test case.
-  - *relation "BrandSeries" does not exist*
+- 上線前務必設定AWS CDN 防止DDOS攻擊使帳單暴增
 
 ## Note
 
