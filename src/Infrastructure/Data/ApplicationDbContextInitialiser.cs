@@ -104,5 +104,55 @@ public class ApplicationDbContextInitialiser
 
             await _context.SaveChangesAsync();
         }
+        
+        // Seed Brands and BrandSeries if necessary
+        if (!_context.Brands.Any())
+        {
+            var artfloorBrand = new Brand { Name = "Artfloor" };
+            var arteoBrand = new Brand { Name = "Arteo" };
+
+            var urbanSeries = new BrandSeries { Name = "Urban", Brand = artfloorBrand };
+            var normalSeries = new BrandSeries { Name = "normal", Brand = arteoBrand };
+
+            _context.Brands.AddRange(artfloorBrand, arteoBrand);
+            _context.BrandSeries.AddRange(urbanSeries, normalSeries);
+
+            await _context.SaveChangesAsync();
+        }
+
+        // Seed ProductItem if necessary
+        if (!_context.ProductItems.Any())
+        {
+            var artfloorBrand = await _context.Brands.FirstOrDefaultAsync(b => b.Name == "Artfloor");
+            var arteoBrand = await _context.Brands.FirstOrDefaultAsync(b => b.Name == "Arteo");
+
+            var urbanSeries = await _context.BrandSeries.FirstOrDefaultAsync(s => s.Name == "Urban" );
+            var normalSeries = await _context.BrandSeries.FirstOrDefaultAsync(s => s.Name == "normal");
+
+            if (urbanSeries != null && normalSeries != null)
+            {
+                _context.ProductItems.AddRange(new List<ProductItem>
+                {
+                    new()
+                    {
+                        Name = "奶油色橡木",
+                        Price = 7200.00M,
+                        Image = "https://your-s3-bucket.s3.amazonaws.com/images/product1.jpg?AWSAccessKeyId=AKIAIOSFODNN7...&Expires=1600000000&Signature=abcdefghij...",
+                        SeriesId = urbanSeries.Id,
+                        BrandSeries = urbanSeries
+                    },
+                    new()
+                    {
+                        Name = "棕色橡木",
+                        Price = 2000.00M,
+                        Image = "https://your-s3-bucket.s3.amazonaws.com/images/product2.jpg?AWSAccessKeyId=AKIAIOSFODNN7...&Expires=1600000000&Signature=abcdefghij...",
+                        SeriesId = normalSeries.Id,
+                        BrandSeries = normalSeries
+                    }
+                });
+
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

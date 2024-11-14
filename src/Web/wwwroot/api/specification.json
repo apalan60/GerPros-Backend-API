@@ -1153,10 +1153,6 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "brandId": {
-            "type": "string",
-            "format": "guid"
-          },
           "seriesId": {
             "type": "string",
             "format": "guid"

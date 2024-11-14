@@ -60,6 +60,11 @@ dotnet test
 & "C:\Program Files\PostgreSQL\17\bin\psql.exe" -h localhost -p 54310 -U TestUser -d GerPros_Backend_APITestDb
 ```
 
+- local Db
+```bash
+& "C:\Program Files\PostgreSQL\17\bin\psql.exe" -h localhost -U TestUser -d GerPros_Backend_APITestDb -W
+```
+
 ## Migration
 
 ```bash

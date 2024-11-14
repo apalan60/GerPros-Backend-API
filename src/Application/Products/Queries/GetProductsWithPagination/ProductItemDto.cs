@@ -30,7 +30,6 @@ public static class ProductItemDtoMapping
             Price = entity.Price,
             Image = entity.Image,
             Detail = entity.Detail,
-            Brand = entity.BrandSeries.Brand,
             Series = entity.BrandSeries
         };
     }

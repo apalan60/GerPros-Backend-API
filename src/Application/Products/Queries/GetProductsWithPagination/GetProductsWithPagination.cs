@@ -25,25 +25,35 @@ public class GetProductsWithPaginationQueryHandler : IRequestHandler<GetProductW
 
     public async Task<PaginatedList<ProductItemDto>> Handle(GetProductWithPaginationQuery request, CancellationToken cancellationToken)
     {
-        PaginatedList<ProductItemDto> products = request switch
+        PaginatedList<ProductItemDto> products;
+        switch (request)
         {
-            { BrandId: not null, SeriesId: not null } => await _context.ProductItems
-                .Include(x => x.BrandSeries)
-                .ThenInclude(x => x.Brand)
-                .Where(x =>  x.SeriesId == request.SeriesId)
-                .Select(x => x.ToDto())
-                .PaginatedListAsync(request.PageNumber, request.PageSize),
-            
-            { Brand: not null, Series: not null } => await _context.ProductItems
-                .Include(x => x.BrandSeries)
-                .ThenInclude(x => x.Brand)
-                .Where(x => x.BrandSeries.Brand.Name == request.Brand && x.BrandSeries.Name == request.Series)
-                .Select(x => x.ToDto())
-                .PaginatedListAsync(request.PageNumber, request.PageSize),
-            
-            _ => throw new Exception(
-                "Invalid query parameters, please provide either BrandId and SeriesId or Brand and Series")
-        };
+            case { BrandId: not null, SeriesId: not null }:
+                products = await _context.ProductItems
+                    .Where(x => x.SeriesId == request.SeriesId && x.BrandSeries.BrandId == request.BrandId)
+                    .Select(x => x.ToDto())
+                    .PaginatedListAsync(request.PageNumber, request.PageSize);
+                break;
+            case { Brand: not null, Series: not null }:
+                var brandId = await _context.Brands
+                    .Where(x => x.Name == request.Brand)
+                    .Select(x => x.Id)
+                    .FirstOrDefaultAsync(cancellationToken);
+                
+                if (brandId == Guid.Empty)
+                {
+                    return new PaginatedList<ProductItemDto>(new List<ProductItemDto>(), 0, 0, 0);
+                }
+                
+                products = await _context.ProductItems
+                    .Where(x => x.BrandSeries.BrandId == brandId && x.BrandSeries.Name == request.Series)
+                    .Select(x => x.ToDto())
+                    .PaginatedListAsync(request.PageNumber, request.PageSize);
+                break;
+            default:
+                throw new Exception(
+                    "Invalid query parameters, please provide either BrandId and SeriesId or Brand and Series");
+        }
 
         return products;
     }

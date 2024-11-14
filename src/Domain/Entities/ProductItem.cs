@@ -15,6 +15,6 @@ public class ProductItem : BaseAuditableEntity
 
     public string? Detail { get; set; }
     
-    public BrandSeries BrandSeries { get; init; } = null!;
+    public virtual BrandSeries BrandSeries { get; init; } = null!;
     
 }

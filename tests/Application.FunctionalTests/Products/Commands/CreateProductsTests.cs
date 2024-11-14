@@ -22,7 +22,6 @@ public class CreateProductsTests : BaseTestFixture
     {
         var command = new CreateProductItemCommand
         {
-            BrandId = Guid.NewGuid(),
             SeriesId = Guid.NewGuid(),
             Price = 1.23m
         };
@@ -36,7 +35,6 @@ public class CreateProductsTests : BaseTestFixture
     {
         var command = new CreateProductItemCommand
         {
-            BrandId = Guid.NewGuid(),
             SeriesId = Guid.NewGuid(),
             Name = "Product Name",
             Price = 1.23m
@@ -64,7 +62,6 @@ public class CreateProductsTests : BaseTestFixture
 
         var command = new CreateProductItemCommand
         {
-            BrandId = brandId,
             SeriesId = seriesId,
             Name = "Product Name",
             Price = 1.23m

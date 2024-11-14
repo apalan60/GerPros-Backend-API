@@ -1,5 +1,15 @@
 ﻿# TODO
 
+- GetBrands API
+- 測試完整流程
+  - Create brand
+  - Get brands
+  - Create series
+  - Get series
+  - Create product
+  - Get products by Series
+  - Get products by Id
+
 - 上線前務必設定AWS CDN 防止DDOS攻擊使帳單暴增
 
 ## Note

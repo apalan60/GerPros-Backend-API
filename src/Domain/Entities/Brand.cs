@@ -7,5 +7,5 @@ public class Brand : BaseAuditableEntity
     /// </summary>
     public string Name { get; set; } = null!;
     
-    public ICollection<BrandSeries> BrandSeries { get; init; } = new List<BrandSeries>();
+    public virtual ICollection<BrandSeries> BrandSeries { get; init; } = new List<BrandSeries>();
 }

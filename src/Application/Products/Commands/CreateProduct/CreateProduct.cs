@@ -6,8 +6,6 @@ namespace GerPros_Backend_API.Application.Products.Commands.CreateProduct;
 
 public record CreateProductItemCommand : IRequest<Guid>
 {
-    public Guid BrandId { get; init; }
-
     public Guid SeriesId { get; init; }
 
     public string Name { get; init; } = null!;
@@ -30,11 +28,8 @@ public class CreateProductItemCommandHandler : IRequestHandler<CreateProductItem
 
     public async Task<Guid> Handle(CreateProductItemCommand request, CancellationToken cancellationToken)
     {
-        var brand = await _context.Brands.FindAsync([request.BrandId], cancellationToken);
-        Guard.Against.NotFound(request.BrandId, brand);
-        
         var series = await _context.BrandSeries
-            .Where(s => s.Id == request.SeriesId && s.BrandId == request.BrandId)
+            .Where(s => s.Id == request.SeriesId )
             .FirstOrDefaultAsync(cancellationToken);
         Guard.Against.NotFound(request.SeriesId, series);
         
