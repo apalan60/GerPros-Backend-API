@@ -6,6 +6,140 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/api/Brand": {
+      "get": {
+        "tags": [
+          "Brand"
+        ],
+        "operationId": "GetBrands",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BrandDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Brand"
+        ],
+        "operationId": "CreateBrand",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProductItemCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Brand/{id}": {
+      "put": {
+        "tags": [
+          "Brand"
+        ],
+        "operationId": "UpdateBrand",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProductCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Brand"
+        ],
+        "operationId": "DeleteBrand",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/ProductItems": {
       "get": {
         "tags": [
@@ -948,6 +1082,222 @@
   },
   "components": {
     "schemas": {
+      "BrandDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "series": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/BrandSeries"
+            }
+          }
+        }
+      },
+      "BrandSeries": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseAuditableEntity"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "brandId": {
+                "type": "string",
+                "format": "guid"
+              },
+              "brand": {
+                "$ref": "#/components/schemas/Brand"
+              },
+              "productItems": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ProductItem"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Brand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseAuditableEntity"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "brandSeries": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/BrandSeries"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "BaseAuditableEntity": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntityOfGuid"
+          },
+          {
+            "type": "object",
+            "x-abstract": true,
+            "additionalProperties": false,
+            "properties": {
+              "created": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "createdBy": {
+                "type": "string",
+                "nullable": true
+              },
+              "lastModified": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "lastModifiedBy": {
+                "type": "string",
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "BaseEntityOfGuid": {
+        "type": "object",
+        "x-abstract": true,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "domainEvents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BaseEvent"
+            }
+          }
+        }
+      },
+      "BaseEvent": {
+        "type": "object",
+        "x-abstract": true,
+        "additionalProperties": false
+      },
+      "ProductItem": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseAuditableEntity"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "seriesId": {
+                "type": "string",
+                "format": "guid"
+              },
+              "name": {
+                "type": "string",
+                "nullable": true
+              },
+              "price": {
+                "type": "number",
+                "format": "decimal"
+              },
+              "image": {
+                "type": "string",
+                "nullable": true
+              },
+              "detail": {
+                "type": "string",
+                "nullable": true
+              },
+              "brandSeries": {
+                "$ref": "#/components/schemas/BrandSeries"
+              }
+            }
+          }
+        ]
+      },
+      "CreateProductItemCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "seriesId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "image": {
+            "type": "string",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UpdateProductCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "seriesId": {
+            "type": "string",
+            "format": "guid",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "price": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "image": {
+            "type": "string",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
       "PaginatedListOfProductItemDto": {
         "type": "object",
         "additionalProperties": false,
@@ -1007,202 +1357,6 @@
           },
           "series": {
             "$ref": "#/components/schemas/BrandSeries"
-          }
-        }
-      },
-      "Brand": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/BaseAuditableEntity"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "name": {
-                "type": "string"
-              },
-              "brandSeries": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/BrandSeries"
-                }
-              }
-            }
-          }
-        ]
-      },
-      "BrandSeries": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/BaseAuditableEntity"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "name": {
-                "type": "string"
-              },
-              "brandId": {
-                "type": "string",
-                "format": "guid"
-              },
-              "brand": {
-                "$ref": "#/components/schemas/Brand"
-              },
-              "productItems": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ProductItem"
-                }
-              }
-            }
-          }
-        ]
-      },
-      "ProductItem": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/BaseAuditableEntity"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "seriesId": {
-                "type": "string",
-                "format": "guid"
-              },
-              "name": {
-                "type": "string",
-                "nullable": true
-              },
-              "price": {
-                "type": "number",
-                "format": "decimal"
-              },
-              "image": {
-                "type": "string",
-                "nullable": true
-              },
-              "detail": {
-                "type": "string",
-                "nullable": true
-              },
-              "brandSeries": {
-                "$ref": "#/components/schemas/BrandSeries"
-              }
-            }
-          }
-        ]
-      },
-      "BaseAuditableEntity": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/BaseEntityOfGuid"
-          },
-          {
-            "type": "object",
-            "x-abstract": true,
-            "additionalProperties": false,
-            "properties": {
-              "created": {
-                "type": "string",
-                "format": "date-time"
-              },
-              "createdBy": {
-                "type": "string",
-                "nullable": true
-              },
-              "lastModified": {
-                "type": "string",
-                "format": "date-time"
-              },
-              "lastModifiedBy": {
-                "type": "string",
-                "nullable": true
-              }
-            }
-          }
-        ]
-      },
-      "BaseEntityOfGuid": {
-        "type": "object",
-        "x-abstract": true,
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "guid"
-          },
-          "domainEvents": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/BaseEvent"
-            }
-          }
-        }
-      },
-      "BaseEvent": {
-        "type": "object",
-        "x-abstract": true,
-        "additionalProperties": false
-      },
-      "CreateProductItemCommand": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "seriesId": {
-            "type": "string",
-            "format": "guid"
-          },
-          "name": {
-            "type": "string"
-          },
-          "price": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "image": {
-            "type": "string",
-            "nullable": true
-          },
-          "detail": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "UpdateProductCommand": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "guid"
-          },
-          "seriesId": {
-            "type": "string",
-            "format": "guid",
-            "nullable": true
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "price": {
-            "type": "number",
-            "format": "decimal",
-            "nullable": true
-          },
-          "image": {
-            "type": "string",
-            "nullable": true
-          },
-          "detail": {
-            "type": "string",
-            "nullable": true
           }
         }
       },

@@ -1,8 +1,9 @@
-﻿using GerPros_Backend_API.Application.TodoItems.Queries.GetTodoItemsWithPagination;
+﻿using GerPros_Backend_API.Application.Common.Security;
 
 namespace GerPros_Backend_API.Application.Products.Queries.GetProductsWithPagination;
 
-public class GetProductsWithPaginationQueryValidator : AbstractValidator<GetTodoItemsWithPaginationQuery>
+[Authorize]
+public class GetProductsWithPaginationQueryValidator : AbstractValidator<GetProductWithPaginationQuery>
 {
     public GetProductsWithPaginationQueryValidator()
     {

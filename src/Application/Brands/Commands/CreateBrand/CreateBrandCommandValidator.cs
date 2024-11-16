@@ -10,6 +10,8 @@ public class CreateBrandCommandValidator : AbstractValidator<CreateBrandCommand>
     {
         _context = context;
         RuleFor(v => v.Name)
+            .NotNull().WithMessage("Name is required.")
+            .NotEmpty().WithMessage("Name is required.")
             .MustAsync(BeUniqueName)
             .WithMessage("'{PropertyName}' must be unique.")
             .WithErrorCode("Unique");

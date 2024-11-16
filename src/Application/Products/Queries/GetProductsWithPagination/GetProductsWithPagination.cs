@@ -1,9 +1,11 @@
 ﻿using GerPros_Backend_API.Application.Common.Interfaces;
 using GerPros_Backend_API.Application.Common.Mappings;
 using GerPros_Backend_API.Application.Common.Models;
+using GerPros_Backend_API.Application.Common.Security;
 
 namespace GerPros_Backend_API.Application.Products.Queries.GetProductsWithPagination;
 
+[Authorize]
 public record GetProductWithPaginationQuery : IRequest<PaginatedList<ProductItemDto>>
 {
     public Guid? BrandId { get; init; }

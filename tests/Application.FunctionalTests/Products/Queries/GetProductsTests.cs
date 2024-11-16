@@ -1,7 +1,7 @@
-﻿using GerPros_Backend_API.Application.Products.Queries.GetProductsWithPagination;
-using GerPros_Backend_API.Application.TodoLists.Queries.GetTodos;
-using GerPros_Backend_API.Domain.Entities;
-using GerPros_Backend_API.Domain.ValueObjects;
+﻿using GerPros_Backend_API.Application.Brands.Commands.CreateBrand;
+using GerPros_Backend_API.Application.Products.Commands.CreateProduct;
+using GerPros_Backend_API.Application.Products.Queries.GetProductsWithPagination;
+using GerPros_Backend_API.Application.Series.Commands.CraeteSeries;
 
 namespace GerPros_Backend_API.Application.FunctionalTests.Products.Queries;
 
@@ -13,35 +13,60 @@ public class GetProductsTests : BaseTestFixture
     public async Task ShouldReturnAllListsAndItems()
     {
         await RunAsDefaultUserAsync();
-
-        await AddAsync(new TodoList
+        
+        //Create Brands
+        var brandId = await SendAsync(new CreateBrandCommand { Name = "Test Brand" });
+        
+        //Create Series
+        var seriesId = await SendAsync(new CreateBrandSeriesCommand { BrandId = brandId, Name = "Test Series 1-1" });
+        
+        //Create Products
+        await SendAsync(new CreateProductItemsCommand
         {
-            Title = "Shopping",
-            Colour = Colour.Blue,
-            Items =
+            Items = 
+                [
+                    new CreateProductItemDto
                     {
-                        new TodoItem { Title = "Apples", Done = true },
-                        new TodoItem { Title = "Milk", Done = true },
-                        new TodoItem { Title = "Bread", Done = true },
-                        new TodoItem { Title = "Toilet paper" },
-                        new TodoItem { Title = "Pasta" },
-                        new TodoItem { Title = "Tissues" },
-                        new TodoItem { Title = "Tuna" }
+                        SeriesId = seriesId,
+                        Name = "Test Product 1",
+                        Price = 100,
+                        Image = "test.jpg",
+                        Detail = "Test Product 1 Detail"
+                    },
+                    new CreateProductItemDto
+                    {
+                        SeriesId = seriesId,
+                        Name = "Test Product 2",
+                        Price = 200,
+                        Image = "test.jpg",
+                        Detail = "Test Product 2 Detail"
                     }
+                ] 
         });
-
-        var query = new GetTodosQuery();
-
+        
+        var query = new GetProductWithPaginationQuery
+        {
+            Brand = "Test Brand",
+            Series = "Test Series 1-1",
+            PageNumber = 1,
+            PageSize = 10
+        };
         var result = await SendAsync(query);
-
-        result.Lists.Should().HaveCount(1);
-        result.Lists.First().Items.Should().HaveCount(7);
+        result.Items.Should().HaveCount(2);
+        result.Items.Should().Contain(x => x.Name == "Test Product 1");
+        result.Items.Should().Contain(x => x.Name == "Test Product 2");
     }
 
     [Test]
     public async Task ShouldDenyAnonymousUser()
     {
-        var query = new GetTodosQuery();
+        var query = new GetProductWithPaginationQuery
+        {
+            Brand = "Test Brand",
+            Series = "Test Series 1-1",
+            PageNumber = 1,
+            PageSize = 10
+        };
 
         var action = () => SendAsync(query);
         
