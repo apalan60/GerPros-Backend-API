@@ -25,7 +25,7 @@
 CREATE DATABASE "GerPros_Backend_APITestDb";
 
 -- 建立使用者並設定密碼
-CREATE USER TestUser WITH PASSWORD 'TestUser123';
+CREATE USER "TestUser" WITH PASSWORD 'TestUser123';
 
 -- 賦予資料庫連線權限
 GRANT CONNECT ON DATABASE "GerPros_Backend_APITestDb" TO TestUser;

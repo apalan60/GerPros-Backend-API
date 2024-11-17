@@ -141,7 +141,7 @@ Authorization: Bearer {{BearerToken}}
 # CreateBrand
 
 POST {{Web_HostAddress}}/api/Brands
-Authorization: Bearer {{ BearerToken }}
+Authorization: Bearer {{ BearerToken}}
 Content-Type: application/json
 
 // CreateBrandCommand
@@ -154,7 +154,7 @@ Content-Type: application/json
 
 # GET Brands
 GET {{Web_HostAddress}}/api/Brands
-Authorization : Bearer {{ BearerToken }}
+Authorization : Bearer {{ BearerToken}}
 
 
 ###
