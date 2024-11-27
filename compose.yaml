@@ -1,0 +1,37 @@
+﻿services:
+  web.api:
+    image: apalan600/gerpros-backend-api:latest 
+    container_name: web.api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    depends_on:
+      - db
+    networks:
+        - gerpros-network
+
+  db:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_USER: "TestUser"
+      POSTGRES_PASSWORD: "TestUser123"
+      POSTGRES_DB: "GerPros_Backend_APITestDb"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+        - gerpros-network
+
+volumes:
+  postgres_data:
+    
+networks:
+    gerpros-network:
+        driver: bridge

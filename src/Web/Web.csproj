@@ -32,12 +32,6 @@
     <PackageReference Include="FluentValidation.AspNetCore" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Include="..\..\.dockerignore">
-      <Link>.dockerignore</Link>
-    </Content>
-  </ItemGroup>
-
 
   <!-- Auto-generated Open API specification and Angular TypeScript clients -->
   <PropertyGroup>

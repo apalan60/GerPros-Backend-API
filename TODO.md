@@ -9,6 +9,8 @@
   - Create product
   - Get products by Series
   - Get products by Id
+    
+- web app volume 掛載
 
 - 產品圖片上傳
 
