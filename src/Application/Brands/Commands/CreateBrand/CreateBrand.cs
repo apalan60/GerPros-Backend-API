@@ -1,5 +1,4 @@
-﻿using GerPros_Backend_API.Application.Brands.EventHandlers;
-using GerPros_Backend_API.Application.Common.Interfaces;
+﻿using GerPros_Backend_API.Application.Common.Interfaces;
 using GerPros_Backend_API.Domain.Entities;
 using GerPros_Backend_API.Domain.Events;
 
