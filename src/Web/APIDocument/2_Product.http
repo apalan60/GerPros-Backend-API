@@ -19,7 +19,7 @@ Content-Type: application/json
 ###
 
 # GET BrandsAndSeries
-GET {{Web_HostAddress}}/api/BrandAndSeries
+GET {{Web_HostAddress}}/api/Series
 Authorization: Bearer {{BearerToken}}
 
 

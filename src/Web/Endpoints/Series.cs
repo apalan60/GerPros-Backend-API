@@ -1,5 +1,5 @@
 ﻿using GerPros_Backend_API.Application.Brands.Queries.GetBrandsAndSeries;
-using GerPros_Backend_API.Application.Series.Commands.CraeteSeries;
+using GerPros_Backend_API.Application.Series.Commands.CreateSeries;
 
 namespace GerPros_Backend_API.Web.Endpoints;
 

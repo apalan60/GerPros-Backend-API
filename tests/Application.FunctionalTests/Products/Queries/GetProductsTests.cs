@@ -1,7 +1,7 @@
 ﻿using GerPros_Backend_API.Application.Brands.Commands.CreateBrand;
 using GerPros_Backend_API.Application.Products.Commands.CreateProduct;
 using GerPros_Backend_API.Application.Products.Queries.GetProductsWithPagination;
-using GerPros_Backend_API.Application.Series.Commands.CraeteSeries;
+using GerPros_Backend_API.Application.Series.Commands.CreateSeries;
 
 namespace GerPros_Backend_API.Application.FunctionalTests.Products.Queries;
 

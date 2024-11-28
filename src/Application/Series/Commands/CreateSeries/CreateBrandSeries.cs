@@ -1,7 +1,7 @@
 ﻿using GerPros_Backend_API.Application.Common.Interfaces;
 using GerPros_Backend_API.Domain.Entities;
 
-namespace GerPros_Backend_API.Application.Series.Commands.CraeteSeries
+namespace GerPros_Backend_API.Application.Series.Commands.CreateSeries
 {
     public record CreateBrandSeriesCommand : IRequest<Guid>
     {
