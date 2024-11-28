@@ -22,8 +22,6 @@
       POSTGRES_USER: "TestUser"
       POSTGRES_PASSWORD: "TestUser123"
       POSTGRES_DB: "GerPros_Backend_APITestDb"
-    ports:
-      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
