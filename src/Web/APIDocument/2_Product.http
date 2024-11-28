@@ -1,0 +1,51 @@
+﻿@Web_HostAddress = http://localhost:8080
+
+@BearerToken = {{BearerToken}} 
+
+###
+
+# CreateBrand
+
+POST {{Web_HostAddress}}/api/Brands
+Authorization: Bearer {{BearerToken}} 
+Content-Type: application/json
+
+// CreateBrandCommand
+{
+  "Name": "Demo Brand"
+}
+
+
+###
+
+# GET Brands
+GET {{Web_HostAddress}}/api/Brands
+Authorization: Bearer {{BearerToken}}
+
+
+###
+
+# GET ProductItems
+GET {{Web_HostAddress}}/api/ProductItems?
+    Brand=Artfloor&
+    Series=Urban&
+    PageNumber=1&
+    PageSize=10
+Authorization: Bearer {{BearerToken}}
+
+###
+
+# POST ProductItems
+POST {{Web_HostAddress}}/api/ProductItems
+Authorization: Bearer {{BearerToken}}
+Content-Type: application/json
+
+// CreateProductItemCommand
+{
+  "SeriesId": "00000000-0000-0000-0000-000000000000",
+  "Name": "Sample Product",
+  "Price": 99.99,
+  "Image": "sample-image-url",
+  "Detail": "Sample product detail"
+}
+
