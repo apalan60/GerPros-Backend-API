@@ -29,3 +29,26 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "GerPros_Backend_API.Web.dll"]
+
+
+# Development image
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS dev
+WORKDIR /src
+EXPOSE 8080
+EXPOSE 8081
+
+# Copy csproj and restore as distinct layers
+COPY ["src/Web/Web.csproj", "src/Web/"]
+COPY ["src/Application/Application.csproj", "src/Application/"]
+COPY ["src/Domain/Domain.csproj", "src/Domain/"]
+COPY ["src/Infrastructure/Infrastructure.csproj", "src/Infrastructure/"]
+COPY ["Directory.Build.props", "./"]
+COPY ["Directory.Packages.props", "./"]
+RUN dotnet restore "src/Web/Web.csproj"
+
+# Copy everything else and build
+COPY . ../
+WORKDIR /src/Web
+
+# Set the entrypoint to use dotnet watch
+ENTRYPOINT ["dotnet", "watch", "run", "--urls", "http://0.0.0.0:8080"]

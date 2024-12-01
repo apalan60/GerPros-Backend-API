@@ -1,0 +1,28 @@
+﻿# Exclude Git and related files
+.git
+.gitignore
+
+# Exclude IDE/editor config files
+.azdo
+.devcontainer
+.github
+.idea
+
+# Exclude test projects
+tests
+
+# Exclude documentation and markdown files
+*.md
+
+# Exclude build outputs and temporary files
+bin
+obj
+*.user
+*.suo
+*.cache
+*.pdb
+
+# Exclude other unnecessary files
+project_structure.md
+azure.yaml
+GerPros-Backend-API.sln.DotSettings.user
