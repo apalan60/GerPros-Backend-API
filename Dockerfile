@@ -1,10 +1,8 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
-EXPOSE 8081
+ENV ASPNETCORE_HTTP_PORTS=8080
 
-#  docker build -t gerpros_web .
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 
@@ -51,4 +49,4 @@ COPY . ../
 WORKDIR /src/Web
 
 # Set the entrypoint to use dotnet watch
-ENTRYPOINT ["dotnet", "watch", "run", "--urls", "http://0.0.0.0:8080"]
+ENTRYPOINT ["dotnet", "watch", "run", "/p:OutputPath=/app/bin", "/p:IntermediateOutputPath=/app/obj"]

@@ -32,6 +32,7 @@ public class GetProductsWithPaginationQueryHandler : IRequestHandler<GetProductW
             case { BrandId: not null, SeriesId: not null }:
                 products = await _context.ProductItems
                     .Where(x => x.SeriesId == request.SeriesId && x.BrandSeries.BrandId == request.BrandId)
+                    .OrderByDescending(x => x.Created)
                     .Select(x => x.ToDto())
                     .PaginatedListAsync(request.PageNumber, request.PageSize);
                 break;
