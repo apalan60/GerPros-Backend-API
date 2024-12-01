@@ -5,7 +5,7 @@ using GerPros_Backend_API.Application.Brands.Queries.GetBrandsAndSeries;
 
 namespace GerPros_Backend_API.Web.Endpoints;
 
-public class Brand : EndpointGroupBase 
+public class Brands : EndpointGroupBase 
 {
     public override void Map(WebApplication app)
     {

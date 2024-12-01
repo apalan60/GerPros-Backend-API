@@ -6,10 +6,10 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/api/Brand": {
+    "/api/Brands": {
       "get": {
         "tags": [
-          "Brand"
+          "Brands"
         ],
         "operationId": "GetBrands",
         "responses": {
@@ -35,7 +35,7 @@
       },
       "post": {
         "tags": [
-          "Brand"
+          "Brands"
         ],
         "operationId": "CreateBrand",
         "requestBody": {
@@ -70,10 +70,10 @@
         ]
       }
     },
-    "/api/Brand/{id}": {
+    "/api/Brands/{id}": {
       "put": {
         "tags": [
-          "Brand"
+          "Brands"
         ],
         "operationId": "UpdateBrand",
         "parameters": [
@@ -113,7 +113,7 @@
       },
       "delete": {
         "tags": [
-          "Brand"
+          "Brands"
         ],
         "operationId": "DeleteBrand",
         "parameters": [
