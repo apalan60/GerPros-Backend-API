@@ -3,18 +3,19 @@ using GerPros_Backend_API.Application.TodoLists.Commands.DeleteTodoList;
 using GerPros_Backend_API.Application.TodoLists.Commands.UpdateTodoList;
 using GerPros_Backend_API.Application.TodoLists.Queries.GetTodos;
 
-namespace GerPros_Backend_API.Web.Endpoints;
+namespace GerPros_Backend_API.Web.Endpoints.Demo;
 
+[Obsolete("This endpoint is for demonstration purposes only.")]
 public class TodoLists : EndpointGroupBase
 {
     public override void Map(WebApplication app)
     {
-        app.MapGroup(this)
-            .RequireAuthorization()
-            .MapGet(GetTodoLists)
-            .MapPost(CreateTodoList)
-            .MapPut(UpdateTodoList, "{id}")
-            .MapDelete(DeleteTodoList, "{id}");
+        // app.MapGroup(this)
+        //     .RequireAuthorization()
+        //     .MapGet(GetTodoLists)
+        //     .MapPost(CreateTodoList)
+        //     .MapPut(UpdateTodoList, "{id}")
+        //     .MapDelete(DeleteTodoList, "{id}");
     }
 
     public Task<TodosVm> GetTodoLists(ISender sender)

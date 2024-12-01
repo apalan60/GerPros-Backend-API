@@ -5,19 +5,20 @@ using GerPros_Backend_API.Application.TodoItems.Commands.UpdateTodoItem;
 using GerPros_Backend_API.Application.TodoItems.Commands.UpdateTodoItemDetail;
 using GerPros_Backend_API.Application.TodoItems.Queries.GetTodoItemsWithPagination;
 
-namespace GerPros_Backend_API.Web.Endpoints;
+namespace GerPros_Backend_API.Web.Endpoints.Demo;
 
+[Obsolete("This endpoint is for demonstration purposes only.")]
 public class TodoItems : EndpointGroupBase
 {
     public override void Map(WebApplication app)
     {
-        app.MapGroup(this)
-            .RequireAuthorization()
-            .MapGet(GetTodoItemsWithPagination)
-            .MapPost(CreateTodoItem)
-            .MapPut(UpdateTodoItem, "{id}")
-            .MapPut(UpdateTodoItemDetail, "UpdateDetail/{id}")
-            .MapDelete(DeleteTodoItem, "{id}");
+        // app.MapGroup(this)
+        //     .RequireAuthorization()
+        //     .MapGet(GetTodoItemsWithPagination)
+        //     .MapPost(CreateTodoItem)
+        //     .MapPut(UpdateTodoItem, "{id}")
+        //     .MapPut(UpdateTodoItemDetail, "UpdateDetail/{id}")
+        //     .MapDelete(DeleteTodoItem, "{id}");
     }
 
     public Task<PaginatedList<TodoItemBriefDto>> GetTodoItemsWithPagination(ISender sender, [AsParameters] GetTodoItemsWithPaginationQuery query)
