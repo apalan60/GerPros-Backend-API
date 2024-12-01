@@ -12,7 +12,5 @@ public class BrandSeries : BaseAuditableEntity
     /// </summary>
     public Guid BrandId { get; set; }
     
-    public virtual Brand Brand { get; init; } = null!;
-    
     public virtual ICollection<ProductItem> ProductItems { get; init; } = new List<ProductItem>();
 }

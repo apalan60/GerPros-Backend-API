@@ -11,9 +11,5 @@ public class BrandSeriesConfiguration : IEntityTypeConfiguration<BrandSeries>
         builder
             .HasIndex(s => s.Name)
             .IsUnique();
-
-        builder
-            .HasOne(s => s.Brand)
-            .WithMany(b => b.BrandSeries);
     }
 }

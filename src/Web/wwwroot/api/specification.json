@@ -43,7 +43,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateProductItemCommand"
+                "$ref": "#/components/schemas/CreateBrandCommand"
               }
             }
           },
@@ -93,7 +93,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateProductCommand"
+                "$ref": "#/components/schemas/UpdateBrandCommand"
               }
             }
           },
@@ -141,6 +141,42 @@
       }
     },
     "/api/ProductItems": {
+      "post": {
+        "tags": [
+          "ProductItems"
+        ],
+        "operationId": "CreateProductItem",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProductItemCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
       "get": {
         "tags": [
           "ProductItems"
@@ -217,48 +253,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "ProductItems"
-        ],
-        "operationId": "CreateProductItem",
-        "requestBody": {
-          "x-name": "command",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateProductItemCommand"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string",
-                  "format": "guid"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
+        }
       }
     },
     "/api/ProductItems/{id}": {
@@ -754,9 +749,6 @@
                 "type": "string",
                 "format": "guid"
               },
-              "brand": {
-                "$ref": "#/components/schemas/Brand"
-              },
               "productItems": {
                 "type": "array",
                 "items": {
@@ -767,7 +759,7 @@
           }
         ]
       },
-      "Brand": {
+      "ProductItem": {
         "allOf": [
           {
             "$ref": "#/components/schemas/BaseAuditableEntity"
@@ -776,14 +768,28 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
+              "seriesId": {
+                "type": "string",
+                "format": "guid"
+              },
               "name": {
-                "type": "string"
+                "type": "string",
+                "nullable": true
+              },
+              "price": {
+                "type": "number",
+                "format": "decimal"
+              },
+              "image": {
+                "type": "string",
+                "nullable": true
+              },
+              "detail": {
+                "type": "string",
+                "nullable": true
               },
               "brandSeries": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/BrandSeries"
-                }
+                "$ref": "#/components/schemas/BrandSeries"
               }
             }
           }
@@ -841,41 +847,27 @@
         "x-abstract": true,
         "additionalProperties": false
       },
-      "ProductItem": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/BaseAuditableEntity"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "seriesId": {
-                "type": "string",
-                "format": "guid"
-              },
-              "name": {
-                "type": "string",
-                "nullable": true
-              },
-              "price": {
-                "type": "number",
-                "format": "decimal"
-              },
-              "image": {
-                "type": "string",
-                "nullable": true
-              },
-              "detail": {
-                "type": "string",
-                "nullable": true
-              },
-              "brandSeries": {
-                "$ref": "#/components/schemas/BrandSeries"
-              }
-            }
+      "CreateBrandCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
           }
-        ]
+        }
+      },
+      "UpdateBrandCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
       },
       "CreateProductItemCommand": {
         "type": "object",
@@ -995,6 +987,28 @@
             "$ref": "#/components/schemas/BrandSeries"
           }
         }
+      },
+      "Brand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseAuditableEntity"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "brandSeries": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/BrandSeries"
+                }
+              }
+            }
+          }
+        ]
       },
       "HttpValidationProblemDetails": {
         "allOf": [

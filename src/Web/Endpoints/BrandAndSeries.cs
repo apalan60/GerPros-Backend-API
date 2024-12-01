@@ -1,9 +1,7 @@
-﻿using GerPros_Backend_API.Application.Brands.Queries.GetBrandsAndSeries;
-using GerPros_Backend_API.Application.Common.Models;
-using GerPros_Backend_API.Application.Products.Commands.CreateProduct;
-using GerPros_Backend_API.Application.Products.Commands.DeleteProduct;
-using GerPros_Backend_API.Application.Products.Commands.UpdateProduct;
-using GerPros_Backend_API.Application.Products.Queries.GetProductsWithPagination;
+﻿using GerPros_Backend_API.Application.Brands.Commands.CreateBrand;
+using GerPros_Backend_API.Application.Brands.Commands.DeleteBrand;
+using GerPros_Backend_API.Application.Brands.Commands.UpdateBrand;
+using GerPros_Backend_API.Application.Brands.Queries.GetBrandsAndSeries;
 
 namespace GerPros_Backend_API.Web.Endpoints;
 
@@ -24,12 +22,12 @@ public class Brand : EndpointGroupBase
         return sender.Send(query);
     }
     
-    public Task<Guid> CreateBrand (ISender sender, CreateProductItemCommand command)
+    public Task<Guid> CreateBrand (ISender sender, CreateBrandCommand command)
     {
         return sender.Send(command);
     }
 
-    public async Task<IResult> UpdateBrand(ISender sender, Guid id, UpdateProductCommand command)
+    public async Task<IResult> UpdateBrand(ISender sender, Guid id, UpdateBrandCommand command)
     {
         if (id != command.Id) return Results.BadRequest();
         await sender.Send(command);
@@ -38,7 +36,7 @@ public class Brand : EndpointGroupBase
 
     public async Task<IResult> DeleteBrand(ISender sender, Guid id)
     {
-        await sender.Send(new DeleteProductCommand(id));
+        await sender.Send(new DeleteBrandCommand(id));
         return Results.NoContent();
     }
 }

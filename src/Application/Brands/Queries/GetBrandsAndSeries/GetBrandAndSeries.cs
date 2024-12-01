@@ -1,9 +1,7 @@
 ﻿using GerPros_Backend_API.Application.Common.Interfaces;
-using GerPros_Backend_API.Application.Common.Security;
 
 namespace GerPros_Backend_API.Application.Brands.Queries.GetBrandsAndSeries;
 
-[Authorize]
 public record GetBrandsAndSeriesQuery : IRequest<IEnumerable<BrandDto>>;
 
 public class GetBrandsAndSeriesQueryHandler : IRequestHandler<GetBrandsAndSeriesQuery, IEnumerable<BrandDto>>

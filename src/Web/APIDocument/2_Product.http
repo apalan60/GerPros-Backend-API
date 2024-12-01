@@ -31,7 +31,6 @@ GET {{Web_HostAddress}}/api/ProductItems?
     Series=Urban&
     PageNumber=1&
     PageSize=10
-Authorization: Bearer {{BearerToken}}
 
 ###
 

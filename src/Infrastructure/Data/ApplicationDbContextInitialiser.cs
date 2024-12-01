@@ -111,8 +111,8 @@ public class ApplicationDbContextInitialiser
             var artfloorBrand = new Brand { Name = "Artfloor" };
             var arteoBrand = new Brand { Name = "Arteo" };
 
-            var urbanSeries = new BrandSeries { Name = "Urban", Brand = artfloorBrand };
-            var normalSeries = new BrandSeries { Name = "normal", Brand = arteoBrand };
+            var urbanSeries = new BrandSeries { Name = "Urban", BrandId = artfloorBrand.Id };
+            var normalSeries = new BrandSeries { Name = "normal", BrandId = arteoBrand.Id };
 
             _context.Brands.AddRange(artfloorBrand, arteoBrand);
             _context.BrandSeries.AddRange(urbanSeries, normalSeries);

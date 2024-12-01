@@ -12,10 +12,12 @@ public class ProductItems : EndpointGroupBase
     {
         app.MapGroup(this)
             .RequireAuthorization()
-            .MapGet(GetProductsWithPagination)
             .MapPost(CreateProductItem)
             .MapPut(UpdateProductItem, "{id}")
             .MapDelete(DeleteProductItem, "{id}");
+        
+        app.MapGroup(this)
+            .MapGet(GetProductsWithPagination);
     }
 
     public Task<PaginatedList<ProductItemDto>> GetProductsWithPagination(ISender sender, [AsParameters] GetProductWithPaginationQuery query)
