@@ -19,6 +19,6 @@ public class CreateSeriesCommandValidator : AbstractValidator<CreateSeriesComman
 
     private async Task<bool> BeUniqueName(CreateSeriesCommand command, string name, CancellationToken cancellationToken)
     {
-        return await _context.Brands.AllAsync(l => l.Name != name, cancellationToken);
+        return await _context.BrandSeries.AllAsync(l => l.Name != name, cancellationToken);
     }
 }
