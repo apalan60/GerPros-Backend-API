@@ -35,7 +35,7 @@ WORKDIR /src
 EXPOSE 8080
 EXPOSE 8081
 
-# Copy csproj and restore as distinct layers
+## Copy csproj and restore as distinct layers
 COPY ["src/Web/Web.csproj", "src/Web/"]
 COPY ["src/Application/Application.csproj", "src/Application/"]
 COPY ["src/Domain/Domain.csproj", "src/Domain/"]
@@ -48,5 +48,17 @@ RUN dotnet restore "src/Web/Web.csproj"
 COPY . ../
 WORKDIR /src/Web
 
-# Set the entrypoint to use dotnet watch
-ENTRYPOINT ["dotnet", "watch", "run", "/p:OutputPath=/app/bin", "/p:IntermediateOutputPath=/app/obj"]
+RUN dotnet tool install -g dotnet-watch
+
+ENV PATH="$PATH:/root/.dotnet/tools"
+
+# Install vsdbg for debugging
+RUN apt-get update && apt-get install -y unzip curl \
+    && mkdir -p /vsdbg \
+    && curl -sSL https://aka.ms/getvsdbgsh | bash /dev/stdin -v latest -l /vsdbg
+
+EXPOSE 8080 
+EXPOSE 4020  
+
+## Set the entrypoint to use dotnet watch
+ENTRYPOINT ["dotnet", "watch", "run", "--urls", "http://0.0.0.0:8080", "--configuration", "Debug"]
