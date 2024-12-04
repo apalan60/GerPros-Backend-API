@@ -7,32 +7,6 @@
   },
   "paths": {
     "/api/Brands": {
-      "get": {
-        "tags": [
-          "Brands"
-        ],
-        "operationId": "GetBrands",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/BrandDto"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      },
       "post": {
         "tags": [
           "Brands"
@@ -68,6 +42,27 @@
             "JWT": []
           }
         ]
+      },
+      "get": {
+        "tags": [
+          "Brands"
+        ],
+        "operationId": "GetBrands",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BrandDto"
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/Brands/{id}": {
@@ -116,6 +111,114 @@
           "Brands"
         ],
         "operationId": "DeleteBrand",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Series": {
+      "post": {
+        "tags": [
+          "Series"
+        ],
+        "operationId": "CreateSeries",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSeriesCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Series/{id}": {
+      "put": {
+        "tags": [
+          "Series"
+        ],
+        "operationId": "UpdateSeries",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSeriesCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Series"
+        ],
+        "operationId": "DeleteSeries",
         "parameters": [
           {
             "name": "id",
@@ -713,6 +816,28 @@
   },
   "components": {
     "schemas": {
+      "CreateBrandCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateBrandCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
       "BrandDto": {
         "type": "object",
         "additionalProperties": false,
@@ -728,135 +853,42 @@
             "type": "array",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/BrandSeries"
+              "$ref": "#/components/schemas/BrandSeriesDto"
             }
           }
         }
       },
-      "BrandSeries": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/BaseAuditableEntity"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "name": {
-                "type": "string"
-              },
-              "brandId": {
-                "type": "string",
-                "format": "guid"
-              },
-              "productItems": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ProductItem"
-                }
-              }
-            }
-          }
-        ]
-      },
-      "ProductItem": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/BaseAuditableEntity"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "seriesId": {
-                "type": "string",
-                "format": "guid"
-              },
-              "name": {
-                "type": "string",
-                "nullable": true
-              },
-              "price": {
-                "type": "number",
-                "format": "decimal"
-              },
-              "image": {
-                "type": "string",
-                "nullable": true
-              },
-              "detail": {
-                "type": "string",
-                "nullable": true
-              },
-              "brandSeries": {
-                "$ref": "#/components/schemas/BrandSeries"
-              }
-            }
-          }
-        ]
-      },
-      "BaseAuditableEntity": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/BaseEntityOfGuid"
-          },
-          {
-            "type": "object",
-            "x-abstract": true,
-            "additionalProperties": false,
-            "properties": {
-              "created": {
-                "type": "string",
-                "format": "date-time"
-              },
-              "createdBy": {
-                "type": "string",
-                "nullable": true
-              },
-              "lastModified": {
-                "type": "string",
-                "format": "date-time"
-              },
-              "lastModifiedBy": {
-                "type": "string",
-                "nullable": true
-              }
-            }
-          }
-        ]
-      },
-      "BaseEntityOfGuid": {
+      "BrandSeriesDto": {
         "type": "object",
-        "x-abstract": true,
         "additionalProperties": false,
         "properties": {
           "id": {
             "type": "string",
             "format": "guid"
           },
-          "domainEvents": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/BaseEvent"
-            }
+          "name": {
+            "type": "string"
+          },
+          "brandId": {
+            "type": "string",
+            "format": "guid"
           }
         }
       },
-      "BaseEvent": {
-        "type": "object",
-        "x-abstract": true,
-        "additionalProperties": false
-      },
-      "CreateBrandCommand": {
+      "CreateSeriesCommand": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "name": {
             "type": "string"
+          },
+          "brandId": {
+            "type": "string",
+            "format": "guid"
           }
         }
       },
-      "UpdateBrandCommand": {
+      "UpdateSeriesCommand": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -1009,6 +1041,120 @@
             }
           }
         ]
+      },
+      "BrandSeries": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseAuditableEntity"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "brandId": {
+                "type": "string",
+                "format": "guid"
+              },
+              "productItems": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ProductItem"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ProductItem": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseAuditableEntity"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "seriesId": {
+                "type": "string",
+                "format": "guid"
+              },
+              "name": {
+                "type": "string",
+                "nullable": true
+              },
+              "price": {
+                "type": "number",
+                "format": "decimal"
+              },
+              "image": {
+                "type": "string",
+                "nullable": true
+              },
+              "detail": {
+                "type": "string",
+                "nullable": true
+              },
+              "brandSeries": {
+                "$ref": "#/components/schemas/BrandSeries"
+              }
+            }
+          }
+        ]
+      },
+      "BaseAuditableEntity": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEntityOfGuid"
+          },
+          {
+            "type": "object",
+            "x-abstract": true,
+            "additionalProperties": false,
+            "properties": {
+              "created": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "createdBy": {
+                "type": "string",
+                "nullable": true
+              },
+              "lastModified": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "lastModifiedBy": {
+                "type": "string",
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "BaseEntityOfGuid": {
+        "type": "object",
+        "x-abstract": true,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "domainEvents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BaseEvent"
+            }
+          }
+        }
+      },
+      "BaseEvent": {
+        "type": "object",
+        "x-abstract": true,
+        "additionalProperties": false
       },
       "HttpValidationProblemDetails": {
         "allOf": [

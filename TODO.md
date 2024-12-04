@@ -5,12 +5,13 @@
 - 測試完整流程
   - Create series
   - Update brand/series tests && endpoints
-  - Get brands
   - Create product
   - Get products by Series
   - Get products by Id
   - Get all products
-    
+
+- debug in local container, if not work, try to create local.json   
+
 - 產品圖片上傳
 
 - 請GerPros整理產品資訊、圖片，存放於demo data setting, 留一個flag，有需要就起站台時塞入DB

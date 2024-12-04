@@ -15,6 +15,21 @@ cd .\src\Web\
 dotnet watch run
 ```
 
+or use docker instead:
+```cmd
+## release
+docker-compose up --build
+```
+
+```cmd
+## development
+docker-compose -f docker-compose.dev.yaml up --build
+```
+
+
+
+```bash
+
 Navigate to https://localhost:5001. The application will automatically reload if you change any of the source files.
 
 ## Code Styles & Formatting

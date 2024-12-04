@@ -28,7 +28,7 @@ public class CreateSeriesTest
     }
     
     [Test]
-    public async Task ShouldCreateBrand()
+    public async Task ShouldCreateSeries()
     {
         var brandId = await SendAsync(new CreateBrandCommand
         {

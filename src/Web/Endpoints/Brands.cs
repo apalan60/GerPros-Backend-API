@@ -11,10 +11,12 @@ public class Brands : EndpointGroupBase
     {
         app.MapGroup(this)
             .RequireAuthorization()
-            .MapGet(GetBrands)
             .MapPost(CreateBrand)
             .MapPut(UpdateBrand, "{id}")
             .MapDelete(DeleteBrand, "{id}");
+        
+        app.MapGroup(this)
+            .MapGet(GetBrands);
     }
 
     public Task<IEnumerable<BrandDto>> GetBrands(ISender sender, [AsParameters] GetBrandsAndSeriesQuery query)

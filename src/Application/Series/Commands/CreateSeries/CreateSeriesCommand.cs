@@ -6,7 +6,7 @@ namespace GerPros_Backend_API.Application.Series.Commands.CreateSeries
     public record CreateSeriesCommand : IRequest<Guid>
     {
         public string Name { get; init; } = null!;
-        public Guid BrandId { get; set; }
+        public Guid BrandId { get; init; }
     }
 
     public class CreateSeriesCommandHandler : IRequestHandler<CreateSeriesCommand, Guid>
@@ -22,7 +22,7 @@ namespace GerPros_Backend_API.Application.Series.Commands.CreateSeries
         {
             var entity = new BrandSeries
             {
-                Id = new Guid(),
+                Id = Guid.NewGuid(),
                 BrandId = request.BrandId,
                 Name = request.Name
             };
