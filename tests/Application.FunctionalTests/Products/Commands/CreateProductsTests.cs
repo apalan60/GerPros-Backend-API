@@ -1,7 +1,7 @@
 ﻿using GerPros_Backend_API.Application.Brands.Commands.CreateBrand;
 using GerPros_Backend_API.Application.Common.Exceptions;
 using GerPros_Backend_API.Application.Products.Commands.CreateProduct;
-using GerPros_Backend_API.Application.Series.Commands.CraeteSeries;
+using GerPros_Backend_API.Application.Series.Commands.CreateSeries;
 using GerPros_Backend_API.Domain.Entities;
 
 namespace GerPros_Backend_API.Application.FunctionalTests.Products.Commands;
@@ -54,7 +54,7 @@ public class CreateProductsTests : BaseTestFixture
             Name = "Brand Name"
         });
         
-        var seriesId = await SendAsync(new CreateBrandSeriesCommand
+        var seriesId = await SendAsync(new CreateSeriesCommand
         {
             BrandId = brandId,
             Name = "Series Name"

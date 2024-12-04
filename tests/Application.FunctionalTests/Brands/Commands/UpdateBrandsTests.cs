@@ -1,6 +1,6 @@
 ﻿using GerPros_Backend_API.Application.Common.Exceptions;
-using GerPros_Backend_API.Application.TodoLists.Commands.CreateTodoList;
-using GerPros_Backend_API.Application.TodoLists.Commands.UpdateTodoList;
+using GerPros_Backend_API.Application.Brands.Commands.CreateBrand;
+using GerPros_Backend_API.Application.Brands.Commands.UpdateBrand;
 using GerPros_Backend_API.Domain.Entities;
 
 namespace GerPros_Backend_API.Application.FunctionalTests.Brands.Commands;
@@ -10,59 +10,59 @@ using static Testing;
 public class UpdateBrandsTests : BaseTestFixture
 {
     [Test]
-    public async Task ShouldRequireValidTodoListId()
+    public async Task ShouldRequireValidBrandId()
     {
-        var command = new UpdateTodoListCommand { Id = new Guid(), Title = "New Title" };
+        var command = new UpdateBrandCommand { Id = Guid.NewGuid(), Name = "New Name" };
         await FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<NotFoundException>();
     }
 
     [Test]
-    public async Task ShouldRequireUniqueTitle()
+    public async Task ShouldRequireUniqueName()
     {
-        var listId = await SendAsync(new CreateTodoListCommand
+        var listId = await SendAsync(new CreateBrandCommand
         {
-            Title = "New List"
+            Name = "New List"
         });
 
-        await SendAsync(new CreateTodoListCommand
+        await SendAsync(new CreateBrandCommand
         {
-            Title = "Other List"
+            Name = "Other List"
         });
 
-        var command = new UpdateTodoListCommand
+        var command = new UpdateBrandCommand
         {
             Id = listId,
-            Title = "Other List"
+            Name = "Other List"
         };
 
         (await FluentActions.Invoking(() =>
             SendAsync(command))
-                .Should().ThrowAsync<ValidationException>().Where(ex => ex.Errors.ContainsKey("Title")))
-                .And.Errors["Title"].Should().Contain("'Title' must be unique.");
+                .Should().ThrowAsync<ValidationException>().Where(ex => ex.Errors.ContainsKey("Name")))
+                .And.Errors["Name"].Should().Contain("'Name' must be unique.");
     }
 
     [Test]
-    public async Task ShouldUpdateTodoList()
+    public async Task ShouldUpdateBrand()
     {
         var userId = await RunAsDefaultUserAsync();
 
-        var listId = await SendAsync(new CreateTodoListCommand
+        var listId = await SendAsync(new CreateBrandCommand
         {
-            Title = "New List"
+            Name = "New List"
         });
 
-        var command = new UpdateTodoListCommand
+        var command = new UpdateBrandCommand
         {
             Id = listId,
-            Title = "Updated List Title"
+            Name = "Updated List Name"
         };
 
         await SendAsync(command);
 
-        var list = await FindAsync<TodoList>(listId);
+        var list = await FindAsync<Brand>(listId);
 
         list.Should().NotBeNull();
-        list!.Title.Should().Be(command.Title);
+        list!.Name.Should().Be(command.Name);
         list.LastModifiedBy.Should().NotBeNull();
         list.LastModifiedBy.Should().Be(userId);
         list.LastModified.Should().BeCloseTo(DateTime.Now, TimeSpan.FromMilliseconds(10000));

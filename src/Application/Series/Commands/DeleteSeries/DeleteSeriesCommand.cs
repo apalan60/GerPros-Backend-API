@@ -15,7 +15,7 @@ namespace GerPros_Backend_API.Application.Series.Commands.DeleteSeries
 
         public async Task Handle(DeleteSeriesCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _context.BrandSeries.FindAsync(new object[] { request.Id }, cancellationToken: cancellationToken);
+            var entity = await _context.BrandSeries.FindAsync([request.Id], cancellationToken: cancellationToken);
 
             Guard.Against.NotFound(request.Id, entity);
 

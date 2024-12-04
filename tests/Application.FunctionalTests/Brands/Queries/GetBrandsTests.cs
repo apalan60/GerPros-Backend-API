@@ -1,6 +1,6 @@
 ﻿using GerPros_Backend_API.Application.Brands.Commands.CreateBrand;
 using GerPros_Backend_API.Application.Brands.Queries.GetBrandsAndSeries;
-using GerPros_Backend_API.Application.Series.Commands.CraeteSeries;
+using GerPros_Backend_API.Application.Series.Commands.CreateSeries;
 
 namespace GerPros_Backend_API.Application.FunctionalTests.Brands.Queries;
 
@@ -16,10 +16,10 @@ public class GetBrandsTests : BaseTestFixture
         var id = await SendAsync(new CreateBrandCommand { Name = "Test Brand" });
         var id2 = await SendAsync(new CreateBrandCommand { Name = "Test Brand 2" });
         
-        await SendAsync(new CreateBrandSeriesCommand { BrandId = id, Name = "Test Series 1-1" });
-        await SendAsync(new CreateBrandSeriesCommand { BrandId = id, Name = "Test Series 1-2" });
-        await SendAsync(new CreateBrandSeriesCommand { BrandId = id2, Name = "Test Series 2-1" });
-        await SendAsync(new CreateBrandSeriesCommand { BrandId = id2, Name = "Test Series 2-2" });
+        await SendAsync(new CreateSeriesCommand { BrandId = id, Name = "Test Series 1-1" });
+        await SendAsync(new CreateSeriesCommand { BrandId = id, Name = "Test Series 1-2" });
+        await SendAsync(new CreateSeriesCommand { BrandId = id2, Name = "Test Series 2-1" });
+        await SendAsync(new CreateSeriesCommand { BrandId = id2, Name = "Test Series 2-2" });
 
         var query = new GetBrandsAndSeriesQuery();
         var result = await SendAsync(query);

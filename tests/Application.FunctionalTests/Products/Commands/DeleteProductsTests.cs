@@ -31,7 +31,7 @@ public class DeleteProductsTests : BaseTestFixture
             Name = "Test Brand",
         });
         
-        await AddAsync(new BrandSeries
+        await AddAsync(new Domain.Entities.BrandSeries
         {
             Id = seriesId,
             Name = "Test Series",

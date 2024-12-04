@@ -3,10 +3,9 @@
 - GetBrands API
 - [sample](https://www.linsenfloors.com)
 - 測試完整流程
-  - Create brand
-  - Get brands
   - Create series
-  - Get series
+  - Update brand/series tests && endpoints
+  - Get brands
   - Create product
   - Get products by Series
   - Get products by Id
