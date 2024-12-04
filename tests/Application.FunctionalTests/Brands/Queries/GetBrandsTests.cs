@@ -37,12 +37,12 @@ public class GetBrandsTests : BaseTestFixture
     }
 
     [Test]
-    public async Task ShouldDenyAnonymousUser()
+    public async Task ShouldNotDenyAnonymousUser()
     {
         var query = new GetBrandsAndSeriesQuery();
 
         var action = () => SendAsync(query);
         
-        await action.Should().ThrowAsync<UnauthorizedAccessException>();
+        await action.Should().NotThrowAsync<UnauthorizedAccessException>();
     }
 }

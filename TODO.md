@@ -1,6 +1,7 @@
 ﻿# TODO
 
 - GetBrands API
+- [sample](https://www.linsenfloors.com)
 - 測試完整流程
   - Create brand
   - Get brands
@@ -9,9 +10,8 @@
   - Create product
   - Get products by Series
   - Get products by Id
+  - Get all products
     
-- web app volume 掛載
-
 - 產品圖片上傳
 
 - 請GerPros整理產品資訊、圖片，存放於demo data setting, 留一個flag，有需要就起站台時塞入DB

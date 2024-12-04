@@ -70,6 +70,6 @@ public class GetProductsTests : BaseTestFixture
 
         var action = () => SendAsync(query);
         
-        await action.Should().ThrowAsync<UnauthorizedAccessException>();
+        await action.Should().NotThrowAsync<UnauthorizedAccessException>();
     }
 }

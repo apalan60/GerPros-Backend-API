@@ -10,9 +10,8 @@ POST {{Web_HostAddress}}/api/Brands
 Authorization: Bearer {{BearerToken}} 
 Content-Type: application/json
 
-// CreateBrandCommand
 {
-  "Name": "Demo Brand"
+  "name": "Demo Brand"
 }
 
 
@@ -39,12 +38,11 @@ POST {{Web_HostAddress}}/api/ProductItems
 Authorization: Bearer {{BearerToken}}
 Content-Type: application/json
 
-// CreateProductItemCommand
 {
-  "SeriesId": "00000000-0000-0000-0000-000000000000",
-  "Name": "Sample Product",
-  "Price": 99.99,
-  "Image": "sample-image-url",
-  "Detail": "Sample product detail"
+  "seriesId": "00000000-0000-0000-0000-000000000000",
+  "name": "Sample Product",
+  "price": 99.99,
+  "image": "sample-image-url",
+  "detail": "Sample product detail"
 }
 
