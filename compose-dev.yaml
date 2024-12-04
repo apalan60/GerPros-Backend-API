@@ -3,7 +3,7 @@
     build:
       context: .
       dockerfile: Dockerfile
-      target: dev
+#      target: dev
     container_name: web.api
     ports:
       - "8080:8080"
