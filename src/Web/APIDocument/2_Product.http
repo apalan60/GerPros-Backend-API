@@ -38,6 +38,14 @@ GET {{Web_HostAddress}}/api/ProductItems?
 
 ###
 
+
+# GET All ProductItems
+GET {{Web_HostAddress}}/api/ProductItems?
+    PageNumber=1&
+    PageSize=10
+
+###
+
 # POST ProductItems
 POST {{Web_HostAddress}}/api/ProductItems
 Authorization: Bearer {{BearerToken}}

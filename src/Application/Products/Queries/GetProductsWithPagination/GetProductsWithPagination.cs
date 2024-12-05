@@ -53,6 +53,12 @@ public class GetProductsWithPaginationQueryHandler : IRequestHandler<GetProductW
                     .Select(x => x.ToDto())
                     .PaginatedListAsync(request.PageNumber, request.PageSize);
                 break;
+            case {Brand: null, Series: null}:
+                products = await _context.ProductItems
+                    .OrderByDescending(x => x.Created)
+                    .Select(x => x.ToDto())
+                    .PaginatedListAsync(request.PageNumber, request.PageSize);
+                break;
             default:
                 throw new Exception(
                     "Invalid query parameters, please provide either BrandId and SeriesId or Brand and Series");
