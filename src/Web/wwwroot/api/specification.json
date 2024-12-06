@@ -812,6 +812,31 @@
           }
         ]
       }
+    },
+    "/api/Utility": {
+      "post": {
+        "tags": [
+          "Utility"
+        ],
+        "operationId": "SeedDatabase",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SeedDatabaseCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1378,6 +1403,15 @@
           "oldPassword": {
             "type": "string",
             "nullable": true
+          }
+        }
+      },
+      "SeedDatabaseCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "secretKey": {
+            "type": "string"
           }
         }
       }

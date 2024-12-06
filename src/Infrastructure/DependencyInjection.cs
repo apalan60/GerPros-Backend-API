@@ -33,6 +33,8 @@ public static class DependencyInjection
 
         services.AddScoped<ApplicationDbContextInitialiser>();
 
+        services.AddSingleton<IMigrationService, MigrationService>();
+        
         services.AddAuthentication()
             .AddBearerToken(IdentityConstants.BearerScheme);
 
