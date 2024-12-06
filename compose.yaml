@@ -14,6 +14,8 @@
       - db
     networks:
       - gerpros-network
+    pull_policy: 
+        always
 
   db:
     image: postgres:latest
