@@ -12,6 +12,9 @@ builder.Services.AddWebServices();
 
 var app = builder.Build();
 
+//todo check this, maybe should remove it after publishing 
+await app.InitialiseDatabaseAsync();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
