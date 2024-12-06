@@ -10,6 +10,18 @@ builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddWebServices();
 
+// Add CORS policy
+var corsPolicyName = "AllowLocalFrontend";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: corsPolicyName, policy =>
+    {
+        policy.WithOrigins("http://localhost:3000") // Frontend URL
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -26,6 +38,9 @@ else
 app.UseHealthChecks("/health");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+// Enable CORS middleware
+app.UseCors(corsPolicyName);
 
 app.UseSwaggerUi(settings =>
 {
