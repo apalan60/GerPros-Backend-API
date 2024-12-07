@@ -11,18 +11,22 @@ builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddWebServices();
 
 // Add CORS policy
-var corsPolicyName = "AllowLocalFrontend";
+// TODO - remove this in production
+const string corsPolicyName = "AllowAll";
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: corsPolicyName, policy =>
-    {
-        policy.WithOrigins("http://localhost:3000") // Frontend URL
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
+    options.AddPolicy(corsPolicyName,
+        policy => policy
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
 });
 
 var app = builder.Build();
+
+// Enable CORS middleware
+// TODO - remove this in production
+app.UseCors(corsPolicyName);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -39,8 +43,7 @@ app.UseHealthChecks("/health");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-// Enable CORS middleware
-app.UseCors(corsPolicyName);
+
 
 app.UseSwaggerUi(settings =>
 {
@@ -51,10 +54,6 @@ app.UseSwaggerUi(settings =>
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");
-
-app.MapRazorPages();
-
-app.MapFallbackToFile("index.html");
 
 app.UseExceptionHandler(options => { });
 

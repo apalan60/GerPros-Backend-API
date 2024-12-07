@@ -1,7 +1,8 @@
 ﻿# For more info on HTTP files go to https://aka.ms/vs/httpfile
-@Web_HostAddress = http://localhost:8080
 @Email=administrator@localhost
 @Password=Administrator1!
+@BearerToken={{BearerToken}}
+@RefreshToken={{RefreshToken}}
 
 # POST Users Login
 POST {{Web_HostAddress}}/api/Users/Login
@@ -11,7 +12,12 @@ Content-Type: application/json
   "email": "{{Email}}",
   "password": "{{Password}}"
 }
-> {% client.global.set("BearerToken", response.body.accessToken) %}
+> {%
+  client.global.set("BearerToken", response.body.accessToken);
+  client.global.set("RefreshToken", response.body.refreshToken);
+%}
+
+
 ###
 
 # POST Users Register
@@ -19,8 +25,8 @@ POST {{Web_HostAddress}}/api/Users/Register
 Content-Type: application/json
 
 {
-  "email": "{{Email}}",
-  "password": "{{Password}}"
+  "email": "apalan60@gmail.com",
+  "password": "1qaz@WSX3edc"
 }
 
 ###
@@ -31,8 +37,5 @@ Authorization: Bearer {{BearerToken}}
 Content-Type: application/json
 
 {
-  "refreshToken": ""
+  "refreshToken": "{{RefreshToken}}" 
 }
-
-
-

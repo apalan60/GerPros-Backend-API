@@ -1,6 +1,4 @@
-﻿@Web_HostAddress = http://localhost:8080
-
-@BearerToken = {{BearerToken}} 
+﻿@BearerToken = {{BearerToken}} 
 
 ###
 
@@ -9,6 +7,6 @@ POST {{Web_HostAddress}}/api/Utility
 Content-Type: application/json
 
 {
-  "SecretKey": "@123456789" 
+  "secretKey": "@123456789" 
 }
 

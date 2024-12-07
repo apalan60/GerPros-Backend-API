@@ -17,6 +17,7 @@ public class ProductItems : EndpointGroupBase
             .MapDelete(DeleteProductItem, "{id}");
         
         app.MapGroup(this)
+            .AllowAnonymous()
             .MapGet(GetProductsWithPagination);
     }
 
