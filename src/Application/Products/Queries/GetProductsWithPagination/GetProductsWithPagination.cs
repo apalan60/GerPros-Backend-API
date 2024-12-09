@@ -33,6 +33,7 @@ public class
         {
             case { BrandId: not null, SeriesId: not null }:
                 products = await _context.ProductItems
+                    .SkipWhile(x => x.IsDeleted)
                     .Where(x => x.SeriesId == request.SeriesId && x.BrandSeries.BrandId == request.BrandId)
                     .OrderByDescending(x => x.Created)
                     .Select(x => x.ToDto())
@@ -41,6 +42,7 @@ public class
 
             case { Brand: not null }:
                 var brandId = await _context.Brands
+                    .SkipWhile(x => x.IsDeleted)
                     .Where(x => x.Name == request.Brand)
                     .Select(x => x.Id)
                     .FirstOrDefaultAsync(cancellationToken);
@@ -51,6 +53,7 @@ public class
                 if (request.Series is null)
                 {
                     products = await _context.ProductItems
+                        .SkipWhile(x => x.IsDeleted)
                         .Where(x => x.BrandSeries.BrandId == brandId)
                         .OrderByDescending(x => x.Created)
                         .Select(x => x.ToDto())
@@ -59,6 +62,7 @@ public class
                 else if (request.Series is not null)
                 {
                     products = await _context.ProductItems
+                        .SkipWhile(x => x.IsDeleted)
                         .Where(x => x.BrandSeries.BrandId == brandId && x.BrandSeries.Name == request.Series)
                         .OrderByDescending(x => x.Created)
                         .Select(x => x.ToDto())
@@ -69,6 +73,7 @@ public class
 
             case { Brand: null, Series: null }:
                 products = await _context.ProductItems
+                    .SkipWhile(x => x.IsDeleted)
                     .OrderByDescending(x => x.Created)
                     .Select(x => x.ToDto())
                     .PaginatedListAsync(request.PageNumber, request.PageSize);
@@ -76,7 +81,6 @@ public class
             default:
                 throw new Exception(
                     "Invalid query parameters, please provide either BrandId and SeriesId or Brand and Series or Brand or none.");
-            
         }
 
         return products;

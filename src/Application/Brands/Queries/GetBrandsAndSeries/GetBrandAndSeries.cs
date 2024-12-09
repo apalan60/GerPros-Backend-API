@@ -16,6 +16,7 @@ public class GetBrandsAndSeriesQueryHandler : IRequestHandler<GetBrandsAndSeries
     public async Task<IEnumerable<BrandDto>> Handle(GetBrandsAndSeriesQuery request, CancellationToken cancellationToken)
     {
         var brandList = await _context.Brands
+            .SkipWhile(b => b.IsDeleted)
             .Include(x => x.BrandSeries)
             .Select(x => x.ToDto())
             .ToListAsync(cancellationToken);

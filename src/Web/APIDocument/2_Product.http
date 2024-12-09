@@ -9,8 +9,16 @@ Authorization: Bearer {{BearerToken}}
 Content-Type: application/json
 
 {
-  "name": "Demo Brand"
+  "name": "Demo Brand2"
 }
+
+###
+
+### DeleteBrand
+
+DELETE {{Web_HostAddress}}/api/Brands/{{brandId}}
+Authorization: Bearer {{BearerToken}}
+
 
 ###
 
@@ -28,11 +36,7 @@ Content-Type: application/json
 ###
 
 # GET ProductItems
-GET {{Web_HostAddress}}/api/ProductItems?
-    Brand=Artfloor&
-    Series=Urban&
-    PageNumber=1&
-    PageSize=10
+GET {{Web_HostAddress}}/api/ProductItems?PageNumber=1&PageSize=24&Brand=Demo+Brand2
 
 ###
 
@@ -69,8 +73,8 @@ GET {{Web_HostAddress}}/api/Brands
 //set first brand id to brandId, and set first series id to seriesId
 > {% 
   const brands = response.body;
-  const firstBrand = brands[0];
-  const firstSeries = firstBrand.series[0];
+  const firstBrand = brands[1];
+  const firstSeries = firstBrand.series[1];
   client.global.set("brandId", firstBrand.id);
   client.global.set("seriesId", firstSeries.id);
 %}

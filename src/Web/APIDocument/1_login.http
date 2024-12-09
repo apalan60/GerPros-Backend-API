@@ -25,7 +25,7 @@ POST {{Web_HostAddress}}/api/Users/Register
 Content-Type: application/json
 
 {
-  "email": "apalan60@gmail.com",
+  "email": "abc@gmail.com",
   "password": "1qaz@WSX3edc"
 }
 
