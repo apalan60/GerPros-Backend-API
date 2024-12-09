@@ -4,7 +4,6 @@ using GerPros_Backend_API.Application.Common.Models;
 
 namespace GerPros_Backend_API.Application.Products.Queries.GetProductsWithPagination;
 
-
 public record GetProductWithPaginationQuery : IRequest<PaginatedList<ProductItemDto>>
 {
     public Guid? BrandId { get; init; }
@@ -15,7 +14,9 @@ public record GetProductWithPaginationQuery : IRequest<PaginatedList<ProductItem
     public int PageSize { get; init; } = 10;
 }
 
-public class GetProductsWithPaginationQueryHandler : IRequestHandler<GetProductWithPaginationQuery, PaginatedList<ProductItemDto>>
+public class
+    GetProductsWithPaginationQueryHandler : IRequestHandler<GetProductWithPaginationQuery,
+    PaginatedList<ProductItemDto>>
 {
     private readonly IApplicationDbContext _context;
 
@@ -24,9 +25,10 @@ public class GetProductsWithPaginationQueryHandler : IRequestHandler<GetProductW
         _context = context;
     }
 
-    public async Task<PaginatedList<ProductItemDto>> Handle(GetProductWithPaginationQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<ProductItemDto>> Handle(GetProductWithPaginationQuery request,
+        CancellationToken cancellationToken)
     {
-        PaginatedList<ProductItemDto> products;
+        PaginatedList<ProductItemDto> products = new(new List<ProductItemDto>(), 0, 0, 0);
         switch (request)
         {
             case { BrandId: not null, SeriesId: not null }:
@@ -36,24 +38,36 @@ public class GetProductsWithPaginationQueryHandler : IRequestHandler<GetProductW
                     .Select(x => x.ToDto())
                     .PaginatedListAsync(request.PageNumber, request.PageSize);
                 break;
-            case { Brand: not null, Series: not null }:
+
+            case { Brand: not null }:
                 var brandId = await _context.Brands
                     .Where(x => x.Name == request.Brand)
                     .Select(x => x.Id)
                     .FirstOrDefaultAsync(cancellationToken);
-                
+
                 if (brandId == Guid.Empty)
+                    return products;
+
+                if (request.Series is null)
                 {
-                    return new PaginatedList<ProductItemDto>(new List<ProductItemDto>(), 0, 0, 0);
+                    products = await _context.ProductItems
+                        .Where(x => x.BrandSeries.BrandId == brandId)
+                        .OrderByDescending(x => x.Created)
+                        .Select(x => x.ToDto())
+                        .PaginatedListAsync(request.PageNumber, request.PageSize);
                 }
-                
-                products = await _context.ProductItems
-                    .Where(x => x.BrandSeries.BrandId == brandId && x.BrandSeries.Name == request.Series)
-                    .OrderByDescending(x => x.Created)
-                    .Select(x => x.ToDto())
-                    .PaginatedListAsync(request.PageNumber, request.PageSize);
+                else if (request.Series is not null)
+                {
+                    products = await _context.ProductItems
+                        .Where(x => x.BrandSeries.BrandId == brandId && x.BrandSeries.Name == request.Series)
+                        .OrderByDescending(x => x.Created)
+                        .Select(x => x.ToDto())
+                        .PaginatedListAsync(request.PageNumber, request.PageSize);
+                }
+
                 break;
-            case {Brand: null, Series: null}:
+
+            case { Brand: null, Series: null }:
                 products = await _context.ProductItems
                     .OrderByDescending(x => x.Created)
                     .Select(x => x.ToDto())
@@ -61,7 +75,8 @@ public class GetProductsWithPaginationQueryHandler : IRequestHandler<GetProductW
                 break;
             default:
                 throw new Exception(
-                    "Invalid query parameters, please provide either BrandId and SeriesId or Brand and Series");
+                    "Invalid query parameters, please provide either BrandId and SeriesId or Brand and Series or Brand or none.");
+            
         }
 
         return products;
