@@ -21,7 +21,7 @@ public class DeleteBrandCommandHandler : IRequestHandler<DeleteBrandCommand>
         
         Guard.Against.NotFound(request.Id, entity);
         
-        entity.IsDeleted = true;
+        _context.Brands.Remove(entity);
         
         entity.AddDomainEvent(new BrandDeletedEvent(entity));
 

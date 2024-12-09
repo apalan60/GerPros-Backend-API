@@ -36,10 +36,6 @@
     <None Remove="APIDocument\Dockerfile" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="APIDocument\Result\" />
-  </ItemGroup>
-
 
   <!-- Auto-generated Open API specification and Angular TypeScript clients -->
   <PropertyGroup>
