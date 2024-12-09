@@ -14,9 +14,9 @@ public class ProductItemDto
 
     public string? Detail { get; init; }
 
-    public Brand Brand { get; init; } = null!;
+    public required string BrandName { get; set; }
     
-    public BrandSeries Series { get; init; } = null!;
+    public required string SeriesName { get; set; }
 }
 
 public static class ProductItemDtoMapping
@@ -30,7 +30,8 @@ public static class ProductItemDtoMapping
             Price = entity.Price,
             Image = entity.Image,
             Detail = entity.Detail,
-            Series = entity.BrandSeries
+            BrandName = entity.BrandSeries.Brand.Name,
+            SeriesName = entity.BrandSeries.Name
         };
     }
 }
