@@ -1,8 +1,19 @@
 ﻿@BearerToken = {{BearerToken}} 
 
-###
+### GET Brands
 
-# CreateBrand
+GET {{Web_HostAddress}}/api/Brands
+
+//set first brand id to brandId, and set first series id to seriesId
+> {% 
+  const brands = response.body;
+  const firstBrand = brands[0];
+  const firstSeries = firstBrand.series[0];
+  client.global.set("brandId", firstBrand.id);
+  client.global.set("seriesId", firstSeries.id);
+%}
+
+### Create Brand
 
 POST {{Web_HostAddress}}/api/Brands
 Authorization: Bearer {{BearerToken}} 
@@ -12,9 +23,26 @@ Content-Type: application/json
   "name": "Demo Brand"
 }
 
-###
 
-# CreateSeries
+### Update Brand
+
+PUT {{Web_HostAddress}}/api/Brands/{{brandId}}
+Authorization: Bearer {{BearerToken}}
+Content-Type: application/json
+
+{
+  "id": "{{brandId}}",
+  "name": "Demo Brand Updated2"
+}
+
+### Delete Brand
+
+DELETE {{Web_HostAddress}}/api/Brands/{{brandId}}
+Authorization: Bearer {{BearerToken}}
+
+Content-Type: application/json
+
+### Create Series
 
 POST {{Web_HostAddress}}/api/Series
 Authorization: Bearer {{BearerToken}}
@@ -25,29 +53,31 @@ Content-Type: application/json
   "name": "Demo Series3"
 }
 
-###
+### Update Series
 
-# GET ProductItems
+PUT {{Web_HostAddress}}/api/Series/{{seriesId}}
+Authorization: Bearer {{BearerToken}}
+Content-Type: application/json
+
+{
+  "name": "Demo Series Updated"
+}
+
+### Delete Series
+
+DELETE {{Web_HostAddress}}/api/Series/{{seriesId}}
+Authorization: Bearer {{BearerToken}}
+Content-Type: application/json
+
+### GET ProductItems
+
 GET {{Web_HostAddress}}/api/ProductItems?
     Brand=Artfloor&
     Series=Urban&
     PageNumber=1&
     PageSize=10
 
-###
-
-
-# GET All ProductItems  and test cors
-GET {{Web_HostAddress}}/api/ProductItems?
-    PageNumber=1&
-    PageSize=10
-Origin: {{Origin}}
-
-
-
-###
-
-# POST ProductItems
+### POST ProductItems
 POST {{Web_HostAddress}}/api/ProductItems
 Authorization: Bearer {{BearerToken}}
 Content-Type: application/json
@@ -61,16 +91,25 @@ Content-Type: application/json
 }
 
 
-###
+### Update ProductItems
+@productItemId = productItemId 
 
-# GET Brands
-GET {{Web_HostAddress}}/api/Brands
+PUT {{Web_HostAddress}}/api/ProductItems/{{productItemId}}
+Authorization: Bearer {{BearerToken}}
+Content-Type: application/json
 
-//set first brand id to brandId, and set first series id to seriesId
-> {% 
-  const brands = response.body;
-  const firstBrand = brands[0];
-  const firstSeries = firstBrand.series[0];
-  client.global.set("brandId", firstBrand.id);
-  client.global.set("seriesId", firstSeries.id);
-%}
+{
+  "name": "Sample Product Updated",
+  "price": 199.99,
+  "image": "sample-image-url-updated",
+  "detail": "Sample product detail updated"
+}
+
+### Delete ProductItems
+
+DELETE {{Web_HostAddress}}/api/ProductItems/{{productItemId}}
+Authorization: Bearer {{BearerToken}}
+Content-Type: application/json
+
+
+
