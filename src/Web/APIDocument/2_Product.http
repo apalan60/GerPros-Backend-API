@@ -50,7 +50,7 @@ Content-Type: application/json
 
 {
   "brandId": "{{brandId}}",
-  "name": "Demo Series3"
+  "name": "Demo Series4"
 }
 
 ### Update Series

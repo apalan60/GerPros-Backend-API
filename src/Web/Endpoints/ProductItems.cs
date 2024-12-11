@@ -2,6 +2,7 @@
 using GerPros_Backend_API.Application.Products.Commands.CreateProduct;
 using GerPros_Backend_API.Application.Products.Commands.DeleteProduct;
 using GerPros_Backend_API.Application.Products.Commands.UpdateProduct;
+using GerPros_Backend_API.Application.Products.Queries.GetProductItem;
 using GerPros_Backend_API.Application.Products.Queries.GetProductsWithPagination;
 
 namespace GerPros_Backend_API.Web.Endpoints;
@@ -18,7 +19,13 @@ public class ProductItems : EndpointGroupBase
         
         app.MapGroup(this)
             .AllowAnonymous()
+            .MapGet(GetProductItemDetail, "{id}")
             .MapGet(GetProductsWithPagination);
+    }
+    
+    public Task<ProductItemDto> GetProductItemDetail(ISender sender, Guid id)
+    {
+        return sender.Send(new GetProductItemDetail(id));
     }
 
     public Task<PaginatedList<ProductItemDto>> GetProductsWithPagination(ISender sender, [AsParameters] GetProductWithPaginationQuery query)
