@@ -4,6 +4,7 @@ using GerPros_Backend_API.Application.Products.Commands.DeleteProduct;
 using GerPros_Backend_API.Application.Products.Commands.UpdateProduct;
 using GerPros_Backend_API.Application.Products.Queries.GetProductItem;
 using GerPros_Backend_API.Application.Products.Queries.GetProductsWithPagination;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GerPros_Backend_API.Web.Endpoints;
 
@@ -16,27 +17,54 @@ public class ProductItems : EndpointGroupBase
             .MapPost(CreateProductItem)
             .MapPut(UpdateProductItem, "{id}")
             .MapDelete(DeleteProductItem, "{id}");
-        
+
         app.MapGroup(this)
             .AllowAnonymous()
             .MapGet(GetProductItemDetail, "{id}")
             .MapGet(GetProductsWithPagination);
     }
-    
+
     public Task<ProductItemDto> GetProductItemDetail(ISender sender, Guid id)
     {
         return sender.Send(new GetProductItemDetail(id));
     }
 
-    public Task<PaginatedList<ProductItemDto>> GetProductsWithPagination(ISender sender, [AsParameters] GetProductWithPaginationQuery query)
+    public Task<PaginatedList<ProductItemDto>> GetProductsWithPagination(ISender sender,
+        [AsParameters] GetProductWithPaginationQuery query)
     {
         return sender.Send(query);
     }
-    
-    public Task<Guid> CreateProductItem (ISender sender, CreateProductItemCommand command)
+
+    public async Task<Guid> CreateProductItem(
+        ISender sender,
+        [FromForm] Guid seriesId,
+        [FromForm] string name,
+        [FromForm] decimal price,
+        [FromForm] string? detail,
+        [FromForm] IFormFile? image)
     {
-        return sender.Send(command);
+        UploadedFile? uploadedFile = null;
+        if (image is { Length: > 0 })
+        {
+            uploadedFile = new UploadedFile(
+                image.OpenReadStream(),
+                image.FileName,
+                image.ContentType
+            );
+        }
+
+        var command = new CreateProductItemCommand
+        {
+            SeriesId = seriesId,
+            Name = name,
+            Price = price,
+            Detail = detail,
+            File = uploadedFile
+        };
+
+        return await sender.Send(command);
     }
+
 
     public async Task<IResult> UpdateProductItem(ISender sender, Guid id, UpdateProductCommand command)
     {

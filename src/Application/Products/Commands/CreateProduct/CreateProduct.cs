@@ -1,4 +1,5 @@
 ﻿using GerPros_Backend_API.Application.Common.Interfaces;
+using GerPros_Backend_API.Application.Common.Models;
 using GerPros_Backend_API.Domain.Entities;
 using GerPros_Backend_API.Domain.Events;
 
@@ -12,7 +13,7 @@ public record CreateProductItemCommand : IRequest<Guid>
 
     public decimal Price { get; init; }
 
-    public string? Image { get; init; }
+    public UploadedFile? File { get; init; }
 
     public string? Detail { get; init; }
 }
@@ -20,29 +21,42 @@ public record CreateProductItemCommand : IRequest<Guid>
 public class CreateProductItemCommandHandler : IRequestHandler<CreateProductItemCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IFileStorageService _fileStorageService;
 
-    public CreateProductItemCommandHandler(IApplicationDbContext context)
+    public CreateProductItemCommandHandler(IApplicationDbContext context, IFileStorageService fileStorageService)
     {
         _context = context;
+        _fileStorageService = fileStorageService;
     }
 
     public async Task<Guid> Handle(CreateProductItemCommand request, CancellationToken cancellationToken)
     {
         var series = await _context.BrandSeries
-            .Where(s => s.Id == request.SeriesId )
+            .Where(s => s.Id == request.SeriesId)
             .FirstOrDefaultAsync(cancellationToken);
         Guard.Against.NotFound(request.SeriesId, series);
-        
+
+        string? imageUrl = null;
+        if (request.File?.Content is { Length: > 0 })
+        {
+            imageUrl = await _fileStorageService.UploadAsync(
+                request.File.Content,
+                request.File.FileName ?? "unknown",
+                request.File.ContentType ?? "application/octet-stream",
+                cancellationToken
+            );
+        }
+
         var entity = new ProductItem
         {
             Id = new Guid(),
             SeriesId = request.SeriesId,
             Name = request.Name,
             Price = request.Price,
-            Image = request.Image,
+            Image = imageUrl,
             Detail = request.Detail
         };
-        
+
         entity.AddDomainEvent(new ProductItemCreatedEvent(entity));
 
         _context.ProductItems.Add(entity);

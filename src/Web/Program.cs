@@ -43,8 +43,6 @@ app.UseHealthChecks("/health");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-
-
 app.UseSwaggerUi(settings =>
 {
     settings.Path = "/api";
@@ -58,6 +56,13 @@ app.MapControllerRoute(
 app.UseExceptionHandler(options => { });
 
 app.Map("/", () => Results.Redirect("/api"));
+
+//Avoiding CSRF attacks
+// builder.Services.AddAntiforgery(options =>
+// {
+//     options.Cookie.Name = ".AspNetCore.Antiforgery"; // 自訂 Cookie 名稱
+//     options.HeaderName = "X-CSRF-TOKEN"; // 用於 AJAX 或 API 測試
+// });
 
 app.MapEndpoints();
 
