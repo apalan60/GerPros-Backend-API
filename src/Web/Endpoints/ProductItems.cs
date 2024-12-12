@@ -66,8 +66,32 @@ public class ProductItems : EndpointGroupBase
     }
 
 
-    public async Task<IResult> UpdateProductItem(ISender sender, Guid id, UpdateProductCommand command)
+    public async Task<IResult> UpdateProductItem(ISender sender, Guid id,
+        [FromForm] Guid seriesId,
+        [FromForm] string name,
+        [FromForm] decimal price,
+        [FromForm] string? detail,
+        [FromForm] IFormFile? image)
     {
+        UploadedFile? uploadedFile = null;
+        if (image is { Length: > 0 })
+        {
+            uploadedFile = new UploadedFile(
+                image.OpenReadStream(),
+                image.FileName,
+                image.ContentType
+            );
+        }
+
+        var command = new UpdateProductCommand
+        {
+            Id = id,
+            SeriesId = seriesId,
+            Name = name,
+            Price = price,
+            Detail = detail,
+            File = uploadedFile
+        };
         if (id != command.Id) return Results.BadRequest();
         await sender.Send(command);
         return Results.NoContent();
