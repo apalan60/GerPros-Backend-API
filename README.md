@@ -69,6 +69,18 @@ To run the tests:
 dotnet test
 ```
 
+## Docker
+
+- Image build
+```bash
+docker image build -t apalan600/gerpros-backend-api:latest .
+```
+
+- Image push
+```bash
+docker push apalan600/gerpros-backend-api:latest
+```
+
 ## Database
 - quick test database login using psql 
 ```shell

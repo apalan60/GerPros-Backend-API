@@ -29,6 +29,7 @@ var app = builder.Build();
 app.UseCors(corsPolicyName);
 
 // Configure the HTTP request pipeline.
+await app.InitialiseDatabaseAsync();
 if (app.Environment.IsDevelopment())
 {
     await app.InitialiseDatabaseAsync();
