@@ -291,7 +291,7 @@ public class ApplicationDbContextInitialiser
                     Name = category.Key,
                     FaqItems = category.Value.Select(item => new FaqItem
                     {
-                        Id = Guid.NewGuid(), Question = item.Question, Answer = item.Answer, FaqCategoryId = categoryId
+                       Question = item.Question, Answer = item.Answer
                     }).ToList()
                 };
             }).ToList();

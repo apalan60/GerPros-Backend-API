@@ -10,6 +10,5 @@ public interface IApplicationDbContext
     DbSet<Brand> Brands { get; }
     DbSet<BrandSeries> BrandSeries { get; }
     DbSet<FaqCategory> FaqCategories { get; }
-    DbSet<FaqItem> FaqItems { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

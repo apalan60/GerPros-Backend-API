@@ -21,8 +21,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
 
     public DbSet<FaqCategory> FaqCategories => Set<FaqCategory>();
     
-    public DbSet<FaqItem> FaqItems => Set<FaqItem>();
-    
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

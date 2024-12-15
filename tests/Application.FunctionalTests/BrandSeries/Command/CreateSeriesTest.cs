@@ -30,7 +30,6 @@ public class CreateSeriesTest
     [Test]
     public async Task ShouldCreateSeries()
     {
-        var userId = await RunAsDefaultUserAsync();
         var brandId = await SendAsync(new CreateBrandCommand
         {
             Name = "Test Brand"
