@@ -82,12 +82,14 @@ dotnet test
 
 ## Migration
 
+from root folder '\GerPros\GerPros-Backend-API> '
 ```bash
-dotnet ef migrations add "SampleMigration" --project src\Infrastructure --startup-project src\Web --output-dir Data\Migrations`
+dotnet ef migrations add "AddFAQTable" --project src/Infrastructure --startup-project src/Web --output-dir Data/Migrations
+
 ```
 
 ```bash
-dotnet ef database update --project src\Infrastructure --startup-project src\Web
+dotnet ef database update --project src/Infrastructure --startup-project src/Web
 ```
 
 - To drop all tables in the database, run the following script in the psql:

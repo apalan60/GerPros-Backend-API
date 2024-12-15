@@ -1,16 +1,6 @@
 ﻿# TODO
 
 - GetBrands API
-- [sample](https://www.linsenfloors.com)
-- 測試完整流程
-  - Create series
-  - Update brand/series tests && endpoints
-  - Create product
-  - Get products by Series
-  - Get products by Id
-  - Get all products
-
-- debug in local container, if not work, try to create local.json   
 
 - 產品圖片上傳
 
