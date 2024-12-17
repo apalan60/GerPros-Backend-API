@@ -1,6 +1,7 @@
 ﻿using GerPros_Backend_API.Application.Common.Interfaces;
 using GerPros_Backend_API.Application.Common.Models;
 using GerPros_Backend_API.Domain.Entities;
+using GerPros_Backend_API.Domain.Enums;
 using GerPros_Backend_API.Domain.Events;
 
 namespace GerPros_Backend_API.Application.Products.Commands.CreateProduct;
@@ -43,13 +44,14 @@ public class CreateProductItemCommandHandler : IRequestHandler<CreateProductItem
                 request.File.Content,
                 request.File.FileName ?? "unknown",
                 request.File.ContentType ?? "application/octet-stream",
+                FileCategory.Product,
                 cancellationToken
             );
         }
 
         var entity = new ProductItem
         {
-            Id = new Guid(),
+            Id = Guid.NewGuid(), 
             SeriesId = request.SeriesId,
             Name = request.Name,
             Price = request.Price,
