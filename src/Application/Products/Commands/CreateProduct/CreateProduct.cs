@@ -1,6 +1,7 @@
 ﻿using GerPros_Backend_API.Application.Common.Interfaces;
 using GerPros_Backend_API.Application.Common.Models;
 using GerPros_Backend_API.Domain.Entities;
+using GerPros_Backend_API.Domain.Enums;
 using GerPros_Backend_API.Domain.Events;
 
 namespace GerPros_Backend_API.Application.Products.Commands.CreateProduct;
@@ -18,20 +19,12 @@ public record CreateProductItemCommand : IRequest<Guid>
     public string? Detail { get; init; }
 }
 
-public class CreateProductItemCommandHandler : IRequestHandler<CreateProductItemCommand, Guid>
+public class CreateProductItemCommandHandler(IApplicationDbContext context, IFileStorageService fileStorageService)
+    : IRequestHandler<CreateProductItemCommand, Guid>
 {
-    private readonly IApplicationDbContext _context;
-    private readonly IFileStorageService _fileStorageService;
-
-    public CreateProductItemCommandHandler(IApplicationDbContext context, IFileStorageService fileStorageService)
-    {
-        _context = context;
-        _fileStorageService = fileStorageService;
-    }
-
     public async Task<Guid> Handle(CreateProductItemCommand request, CancellationToken cancellationToken)
     {
-        var series = await _context.BrandSeries
+        var series = await context.BrandSeries
             .Where(s => s.Id == request.SeriesId)
             .FirstOrDefaultAsync(cancellationToken);
         Guard.Against.NotFound(request.SeriesId, series);
@@ -39,17 +32,18 @@ public class CreateProductItemCommandHandler : IRequestHandler<CreateProductItem
         string? imageUrl = null;
         if (request.File?.Content is { Length: > 0 })
         {
-            imageUrl = await _fileStorageService.UploadAsync(
+            imageUrl = await fileStorageService.UploadAsync(
                 request.File.Content,
                 request.File.FileName ?? "unknown",
                 request.File.ContentType ?? "application/octet-stream",
+                FileCategory.Product,
                 cancellationToken
             );
         }
 
         var entity = new ProductItem
         {
-            Id = new Guid(),
+            Id = Guid.NewGuid(), 
             SeriesId = request.SeriesId,
             Name = request.Name,
             Price = request.Price,
@@ -59,9 +53,9 @@ public class CreateProductItemCommandHandler : IRequestHandler<CreateProductItem
 
         entity.AddDomainEvent(new ProductItemCreatedEvent(entity));
 
-        _context.ProductItems.Add(entity);
+        context.ProductItems.Add(entity);
 
-        await _context.SaveChangesAsync(cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
 
         return entity.Id;
     }

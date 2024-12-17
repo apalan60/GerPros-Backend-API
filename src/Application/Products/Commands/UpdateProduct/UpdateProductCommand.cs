@@ -1,5 +1,6 @@
 ﻿using GerPros_Backend_API.Application.Common.Interfaces;
 using GerPros_Backend_API.Application.Common.Models;
+using GerPros_Backend_API.Domain.Enums;
 
 namespace GerPros_Backend_API.Application.Products.Commands.UpdateProduct;
 
@@ -34,6 +35,7 @@ public class UpdateProductCommandHandler(IApplicationDbContext context, IFileSto
                 request.File.Content,
                 request.File.FileName ?? "unknown",
                 request.File.ContentType ?? "application/octet-stream",
+                FileCategory.Product,
                 cancellationToken
             );
         }
