@@ -243,6 +243,106 @@
         ]
       }
     },
+    "/api/FAQ": {
+      "get": {
+        "tags": [
+          "FAQ"
+        ],
+        "operationId": "GetFaq",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FaqCategoryDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "FAQ"
+        ],
+        "operationId": "CreateFaq",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFaqCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FaqCategoryDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/FAQ/{id}": {
+      "put": {
+        "tags": [
+          "FAQ"
+        ],
+        "operationId": "UpdateFaq",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateFaqCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/ProductItems": {
       "post": {
         "tags": [
@@ -1039,6 +1139,83 @@
           },
           "name": {
             "type": "string"
+          }
+        }
+      },
+      "FaqCategoryDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "categoryName": {
+            "type": "string"
+          },
+          "faqItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FaqItemDto"
+            }
+          }
+        }
+      },
+      "FaqItemDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "question": {
+            "type": "string"
+          },
+          "answer": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateFaqCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "categoryName": {
+            "type": "string"
+          },
+          "faqItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateOrUpdateFaqItemDto"
+            }
+          }
+        }
+      },
+      "CreateOrUpdateFaqItemDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "question": {
+            "type": "string"
+          },
+          "answer": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateFaqCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "categoryName": {
+            "type": "string"
+          },
+          "faqItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateOrUpdateFaqItemDto"
+            }
           }
         }
       },

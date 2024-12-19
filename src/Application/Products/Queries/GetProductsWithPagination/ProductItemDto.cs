@@ -10,7 +10,7 @@ public class ProductItemDto
 
     public decimal Price { get; init; }
 
-    public string? Image { get; init; }
+    public string? Image { get; set; }
 
     public string? Detail { get; init; }
 
