@@ -9,12 +9,12 @@ namespace GerPros_Backend_API.Infrastructure.File;
 public class S3FileStorageService : IFileStorageService
 {
     private readonly IAmazonS3 _s3Client;
-    private readonly S3Setting _s3Setting;
+    private readonly S3Settings _s3Settings;
 
-    public S3FileStorageService(IAmazonS3 s3Client, IOptions<S3Setting> s3Setting)
+    public S3FileStorageService(IAmazonS3 s3Client, IOptions<S3Settings> s3Setting)
     {
         _s3Client = s3Client;
-        _s3Setting = s3Setting.Value;
+        _s3Settings = s3Setting.Value;
     }
 
     public async Task<string?> UploadAsync(Stream fileStream, string fileName, string contentType,
@@ -29,7 +29,7 @@ public class S3FileStorageService : IFileStorageService
         var key = Guid.NewGuid();
         var request = new PutObjectRequest
         {
-            BucketName = _s3Setting.BucketName,
+            BucketName = _s3Settings.BucketName,
             Key = $"{fileCategory.ToString()}/{key}",
             InputStream = fileStream,
             ContentType = contentType,
@@ -41,6 +41,8 @@ public class S3FileStorageService : IFileStorageService
         
         PutObjectResponse? response = await _s3Client.PutObjectAsync(request, cancellationToken);
         // todo get presigned url
+
+        return key.ToString();
     }
 
 

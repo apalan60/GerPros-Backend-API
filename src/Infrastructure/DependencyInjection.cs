@@ -59,10 +59,10 @@ public static class DependencyInjection
         services.AddSingleton<IFileStorageService, S3FileStorageService>();
         
         // S3 setting
-        services.Configure<S3Setting>(configuration.GetSection("S3Setting"));
+        services.Configure<S3Settings>(configuration.GetSection("S3Settings"));
         services.AddSingleton<IAmazonS3>(sp =>
         {
-            var s3Setting = sp.GetRequiredService<IOptions<S3Setting>>().Value;
+            var s3Setting = sp.GetRequiredService<IOptions<S3Settings>>().Value;
             var config = new AmazonS3Config
             {
                 RegionEndpoint = RegionEndpoint.GetBySystemName(s3Setting.Region)
