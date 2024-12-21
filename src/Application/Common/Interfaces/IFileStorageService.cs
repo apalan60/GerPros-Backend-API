@@ -29,4 +29,6 @@ public interface IFileStorageService
     Task<string> GetUploadPreSignedUrl(string fileName, string contentType, FileCategory fileCategory, CancellationToken cancellationToken);
     
     Task<bool> DeleteAsync(string key, FileCategory fileCategory, CancellationToken cancellationToken);
+    Task<bool> DeleteAllAsync(ICollection<string> key, FileCategory fileCategory, CancellationToken cancellationToken);
+    Task<bool> ExistsAsync(string key, FileCategory fileCategory);
 }

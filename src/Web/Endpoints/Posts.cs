@@ -1,0 +1,100 @@
+﻿// using GerPros_Backend_API.Application.Common.Models;
+// using Microsoft.AspNetCore.Mvc;
+//
+// namespace GerPros_Backend_API.Web.Endpoints;
+//
+// public class Posts : EndpointGroupBase
+// {
+//     public override void Map(WebApplication app)
+//     {
+//         app.MapGroup(this)
+//             .RequireAuthorization()
+//             .MapPost(CreateProductItem)
+//             .MapPut(UpdateProductItem, "{id}")
+//             .MapDelete(DeleteProductItem, "{id}");
+//
+//         app.MapGroup(this)
+//             .AllowAnonymous()
+//             .MapGet(GetProductItemDetail, "{id}")
+//             .MapGet(GetProductsWithPagination);
+//     }
+//
+//     public Task<ProductItemDto> GetProductItemDetail(ISender sender, Guid id)
+//     {
+//         return sender.Send(new GetProductItemDetail(id));
+//     }
+//
+//     public Task<PaginatedList<ProductItemDto>> GetProductsWithPagination(ISender sender,
+//         [AsParameters] GetProductWithPaginationQuery query)
+//     {
+//         return sender.Send(query);
+//     }
+//
+//     public async Task<Guid> CreateProductItem(
+//         ISender sender,
+//         [FromForm] Guid seriesId,
+//         [FromForm] string name,
+//         [FromForm] decimal price,
+//         [FromForm] string? detail,
+//         [FromForm] IFormFile? image)
+//     {
+//         UploadedFile? uploadedFile = null;
+//         if (image is { Length: > 0 })
+//         {
+//             uploadedFile = new UploadedFile(
+//                 image.OpenReadStream(),
+//                 image.FileName,
+//                 image.ContentType
+//             );
+//         }
+//
+//         var command = new CreateProductItemCommand
+//         {
+//             SeriesId = seriesId,
+//             Name = name,
+//             Price = price,
+//             Detail = detail,
+//             File = uploadedFile
+//         };
+//
+//         return await sender.Send(command);
+//     }
+//
+//
+//     public async Task<IResult> UpdateProductItem(ISender sender, Guid id,
+//         [FromForm] Guid seriesId,
+//         [FromForm] string name,
+//         [FromForm] decimal price,
+//         [FromForm] string? detail,
+//         [FromForm] IFormFile? image)
+//     {
+//         UploadedFile? uploadedFile = null;
+//         if (image is { Length: > 0 })
+//         {
+//             uploadedFile = new UploadedFile(
+//                 image.OpenReadStream(),
+//                 image.FileName,
+//                 image.ContentType
+//             );
+//         }
+//
+//         var command = new UpdateProductCommand
+//         {
+//             Id = id,
+//             SeriesId = seriesId,
+//             Name = name,
+//             Price = price,
+//             Detail = detail,
+//             File = uploadedFile
+//         };
+//         if (id != command.Id) return Results.BadRequest();
+//         await sender.Send(command);
+//         return Results.NoContent();
+//     }
+//
+//     public async Task<IResult> DeleteProductItem(ISender sender, Guid id)
+//     {
+//         await sender.Send(new DeleteProductCommand(id));
+//         return Results.NoContent();
+//     }
+// }
