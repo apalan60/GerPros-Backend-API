@@ -14,17 +14,24 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<TodoList> TodoLists => Set<TodoList>();
 
     public DbSet<TodoItem> TodoItems => Set<TodoItem>();
-    
+
     public DbSet<ProductItem> ProductItems => Set<ProductItem>();
+    
     public DbSet<Brand> Brands => Set<Brand>();
+    
     public DbSet<BrandSeries> BrandSeries => Set<BrandSeries>();
 
     public DbSet<FaqCategory> FaqCategories => Set<FaqCategory>();
+
+    public DbSet<Tag> Tags => Set<Tag>();
+
+    public DbSet<Post> Posts => Set<Post>();
     
+    public DbSet<PostTag> PostTags => Set<PostTag>();
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        
     }
 }

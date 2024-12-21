@@ -87,6 +87,30 @@ public class S3FileStorageService : IFileStorageService
             .ContinueWith(task => task.Result.HttpStatusCode == System.Net.HttpStatusCode.NoContent, cancellationToken);
     }
 
+    public async Task<bool> ExistsAsync(string key, FileCategory fileCategory)
+    {
+        var fileKey = $"{fileCategory.ToString()}/{key}";
+        var request = new GetObjectMetadataRequest
+        {
+            BucketName = _s3Settings.BucketName,
+            Key = fileKey,
+        };
+        
+        try
+        {
+            await _s3Client.GetObjectMetadataAsync(request);
+            return true;
+        }
+        catch (AmazonS3Exception ex)
+        {
+            if (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return false;
+            }
+            throw new Exception($"Error checking file existence: '{ex.Message}'");
+        }
+    }
+
     private async Task CreateBucketIfNotExisted()
     {
         var bucketExists = await BucketExistsAsync(_s3Client, _s3Settings.BucketName);

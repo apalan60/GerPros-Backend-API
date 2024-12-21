@@ -1,12 +1,14 @@
 ﻿# TODO
 
-- GetBrands API
+- use ECS to run image from ECR
 
-- 產品圖片上傳
+- integrate with AWS RDS / docker compose?
 
 - 請GerPros整理產品資訊、圖片，存放於demo data setting, 留一個flag，有需要就起站台時塞入DB
 
 - 上線前務必設定AWS CDN 防止DDOS攻擊使帳單暴增
+
+- public bucket 改為CloudFront cache + S3 + WAF => implement throttle requests
 
 ## Note
 
