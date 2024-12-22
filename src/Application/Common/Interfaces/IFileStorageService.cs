@@ -1,4 +1,5 @@
-﻿using GerPros_Backend_API.Domain.Enums;
+﻿using GerPros_Backend_API.Domain;
+using GerPros_Backend_API.Domain.Enums;
 
 namespace GerPros_Backend_API.Application.Common.Interfaces;
 
@@ -24,7 +25,7 @@ public interface IFileStorageService
     /// <param name="cancellationToken"></param>
     /// <param name="isPublic"></param>
     /// <returns>上傳後可供外部存取的檔案URL</returns>
-    Task<string> UploadAsync(Stream fileStream, string fileName, string contentType,
+    Task<FileStorageInfo> UploadAsync(Stream fileStream, string fileName, string contentType,
         FileCategory fileCategory,
         CancellationToken cancellationToken,
         bool isPublic = false);

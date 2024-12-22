@@ -1,10 +1,11 @@
 ﻿using GerPros_Backend_API.Application.Common.Interfaces;
 using GerPros_Backend_API.Application.Common.Models;
+using GerPros_Backend_API.Domain;
 using GerPros_Backend_API.Domain.Enums;
 
 namespace GerPros_Backend_API.Application.Files.UploadFile;
 
-public class UploadFileCommand : IRequest<string>
+public class UploadFileCommand : IRequest<FileStorageInfo>
 {
     public UploadedFile File { get; init; } = null!;
     
@@ -14,9 +15,9 @@ public class UploadFileCommand : IRequest<string>
 }
 
 
-public class UploadFileCommandHandler(IFileStorageService fileStorageService) : IRequestHandler<UploadFileCommand, string>
+public class UploadFileCommandHandler(IFileStorageService fileStorageService) : IRequestHandler<UploadFileCommand, FileStorageInfo>
 {
-    public async Task<string> Handle(UploadFileCommand request, CancellationToken cancellationToken)
+    public async Task<FileStorageInfo> Handle(UploadFileCommand request, CancellationToken cancellationToken)
     {
         return await fileStorageService.UploadAsync(
             request.File.Content ?? throw new InvalidOperationException(),

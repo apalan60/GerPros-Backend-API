@@ -1,8 +1,10 @@
 ﻿using Amazon.S3;
 using Amazon.S3.Model;
 using GerPros_Backend_API.Application.Common.Interfaces;
+using GerPros_Backend_API.Domain;
 using GerPros_Backend_API.Domain.Enums;
 using Microsoft.Extensions.Options;
+using ArgumentException = System.ArgumentException;
 
 namespace GerPros_Backend_API.Infrastructure.File;
 
@@ -18,7 +20,7 @@ public class S3FileStorageService : IFileStorageService
     }
 
     
-    public async Task<string> UploadAsync(Stream fileStream, string fileName, string contentType,
+    public async Task<FileStorageInfo> UploadAsync(Stream fileStream, string fileName, string contentType,
         FileCategory fileCategory,
         CancellationToken cancellationToken,
         bool isPublic = false)
@@ -40,7 +42,11 @@ public class S3FileStorageService : IFileStorageService
         try
         {
             await _s3Client.PutObjectAsync(request, cancellationToken);
-            return key.ToString();
+            return new FileStorageInfo
+            {
+                Name = fileName,
+                ImageKey = key.ToString() 
+            };
         }
         catch (AmazonS3Exception amazonS3Exception)
         {
