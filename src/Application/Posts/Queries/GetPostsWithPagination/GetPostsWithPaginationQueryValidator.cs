@@ -1,8 +1,8 @@
 ﻿namespace GerPros_Backend_API.Application.Posts.Queries.GetPostsWithPagination;
 
-public class GetProductsWithPaginationQueryValidator : AbstractValidator<GetProductWithPaginationQuery>
+public class GetPostsWithPaginationQueryValidator : AbstractValidator<GetPostWithPaginationQuery>
 {
-    public GetProductsWithPaginationQueryValidator()
+    public GetPostsWithPaginationQueryValidator()
     {
         RuleFor(x => x.PageNumber)
             .GreaterThanOrEqualTo(1).WithMessage("PageNumber at least greater than or equal to 1.");

@@ -20,7 +20,8 @@ public class S3FileStorageService : IFileStorageService
     
     public async Task<string> UploadAsync(Stream fileStream, string fileName, string contentType,
         FileCategory fileCategory,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken,
+        bool isPublic = false)
     {
         if (fileStream.Length == 0)
             throw new ArgumentException("File is empty.", fileName);
@@ -34,7 +35,7 @@ public class S3FileStorageService : IFileStorageService
             ContentType = contentType,
         };
 
-        await CreateBucketIfNotExisted();
+        await CreateBucketIfNotExisted(isPublic);
 
         try
         {
@@ -53,8 +54,11 @@ public class S3FileStorageService : IFileStorageService
         throw new NotImplementedException();
     }
 
-    public async Task<string?> GetUrlAsync(string key, FileCategory fileCategory)
+    public async Task<string?> GetUrlAsync(string key, FileCategory fileCategory, bool isPublic = false)
     {
+        if (isPublic)
+            return "https://s3.amazonaws.com/" + _s3Settings.PublicBucketName + $"/{fileCategory.ToString()}/{key}";
+        
         var request = new GetPreSignedUrlRequest
         {
             BucketName = _s3Settings.BucketName,
@@ -124,12 +128,13 @@ public class S3FileStorageService : IFileStorageService
         }
     }
 
-    private async Task CreateBucketIfNotExisted()
+    private async Task CreateBucketIfNotExisted(bool isPublic)
     {
-        var bucketExists = await BucketExistsAsync(_s3Client, _s3Settings.BucketName);
+        string bucketName = isPublic? _s3Settings.PublicBucketName:  _s3Settings.BucketName;
+        var bucketExists = await BucketExistsAsync(_s3Client, bucketName);
         if (!bucketExists)
         {
-            var result = await CreateBucketAsync(_s3Client, _s3Settings.BucketName);
+            var result = await CreateBucketAsync(_s3Client, bucketName, isPublic);
             if (!result)
             {
                 throw new Exception("Error creating bucket.");
@@ -190,11 +195,16 @@ public class S3FileStorageService : IFileStorageService
         }
     }
 
-    private static async Task<bool> CreateBucketAsync(IAmazonS3 client, string bucketName)
+    private static async Task<bool> CreateBucketAsync(IAmazonS3 client, string bucketName, bool isPublic)
     {
         try
         {
-            var request = new PutBucketRequest { BucketName = bucketName, UseClientRegion = true, };
+            var request = new PutBucketRequest
+            {
+                BucketName = bucketName, 
+                UseClientRegion = true,
+                CannedACL = isPublic ? S3CannedACL.PublicRead : S3CannedACL.Private,
+            };
 
             var response = await client.PutBucketAsync(request);
             return response.HttpStatusCode == System.Net.HttpStatusCode.OK;

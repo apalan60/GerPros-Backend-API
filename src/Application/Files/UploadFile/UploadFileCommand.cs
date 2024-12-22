@@ -7,7 +7,12 @@ namespace GerPros_Backend_API.Application.Files.UploadFile;
 public class UploadFileCommand : IRequest<string>
 {
     public UploadedFile File { get; init; } = null!;
+    
+    public required FileCategory Category { get; init; }
+    
+    public bool IsPublic { get; init; } = false;
 }
+
 
 public class UploadFileCommandHandler(IFileStorageService fileStorageService) : IRequestHandler<UploadFileCommand, string>
 {
@@ -17,8 +22,9 @@ public class UploadFileCommandHandler(IFileStorageService fileStorageService) : 
             request.File.Content ?? throw new InvalidOperationException(),
             request.File.FileName ?? throw new InvalidOperationException(), 
             request.File.ContentType ?? "application/octet-stream",
-            FileCategory.Post,
-            cancellationToken
+            request.Category,
+            cancellationToken,
+            request.IsPublic
         );
     }
 } 

@@ -2,12 +2,12 @@
 
 namespace GerPros_Backend_API.Application.Posts.Queries.GetPost;
 
-public record GetPostDetail(Guid Id) : IRequest<PostDto>;
+public record GetPostDetailQuery(Guid Id) : IRequest<PostDto>;
 
 public class GetPostDetailQueryHandler(IApplicationDbContext context)
-    : IRequestHandler<GetPostDetail, PostDto>
+    : IRequestHandler<GetPostDetailQuery, PostDto>
 {
-    public async Task<PostDto> Handle(GetPostDetail request, CancellationToken cancellationToken)
+    public async Task<PostDto> Handle(GetPostDetailQuery request, CancellationToken cancellationToken)
     {
         var post = await context.Posts
             .Include(p => p.PostTags)
