@@ -39,7 +39,7 @@ public class CreateProductItemCommandHandler(IApplicationDbContext context, IFil
                 FileCategory.Product,
                 cancellationToken
             );
-            imageKey = fileInfo.Key;
+            imageKey = fileInfo.StorageKey;
         }
 
         var entity = new ProductItem

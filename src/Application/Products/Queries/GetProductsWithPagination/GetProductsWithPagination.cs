@@ -72,7 +72,7 @@ public class GetProductsWithPaginationQueryHandler(IApplicationDbContext context
         {
             if (item.Image is not null)
             {
-                item.Image = await fileStorageService.GetUrlAsync(item.Image, FileCategory.Product);
+                item.Image = await fileStorageService.GetUrlAsync(item.Image, FileCategory.Product, DateTime.UtcNow.AddMinutes(30));
             }
         }
         return result ?? throw new Exception("Invalid query parameters, please provide either BrandId and SeriesId or Brand and Series or Brand or none.");

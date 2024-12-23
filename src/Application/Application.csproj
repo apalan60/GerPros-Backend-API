@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Files\" />
     <Folder Include="Posts\Commands\UploadFile\" />
     <Folder Include="Utility\" />
   </ItemGroup>

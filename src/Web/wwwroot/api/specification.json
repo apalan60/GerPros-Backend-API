@@ -551,7 +551,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FileStorageInfo"
+                  "$ref": "#/components/schemas/UploadPostFileResponse"
                 }
               }
             }
@@ -1505,7 +1505,7 @@
           "name": {
             "type": "string"
           },
-          "key": {
+          "storageKey": {
             "type": "string"
           }
         }
@@ -1661,6 +1661,18 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
+          }
+        }
+      },
+      "UploadPostFileResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "fileStorageInfo": {
+            "$ref": "#/components/schemas/FileStorageInfo"
+          },
+          "url": {
+            "type": "string"
           }
         }
       },

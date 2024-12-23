@@ -38,7 +38,7 @@ public class UpdateProductCommandHandler(IApplicationDbContext context, IFileSto
                 FileCategory.Product,
                 cancellationToken
             );
-            imageKey = fileInfo.Key;
+            imageKey = fileInfo.StorageKey;
         }
 
         entity.SeriesId = request.SeriesId ?? entity.SeriesId;

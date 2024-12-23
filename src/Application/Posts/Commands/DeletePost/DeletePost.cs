@@ -23,7 +23,7 @@ public class DeletePostCommandHandler(IApplicationDbContext context, IFileStorag
         {
             foreach (var file in entity.FileStorageInfo)
             {
-                await fileStorageService.DeleteAsync(file.Key, FileCategory.Post, cancellationToken);
+                await fileStorageService.DeleteAsync(file.StorageKey, FileCategory.Post, cancellationToken);
             }
         }
     }

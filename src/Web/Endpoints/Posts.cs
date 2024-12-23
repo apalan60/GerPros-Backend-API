@@ -1,4 +1,5 @@
 ﻿using GerPros_Backend_API.Application.Common.Models;
+using GerPros_Backend_API.Application.Files.GetUrl;
 using GerPros_Backend_API.Application.Files.UploadFile;
 using GerPros_Backend_API.Application.Posts.Commands.CreatePost;
 using GerPros_Backend_API.Application.Posts.Commands.DeletePost;
@@ -26,22 +27,25 @@ public class Posts : EndpointGroupBase
             .AllowAnonymous()
             .MapGet(GetPostDetail, "{id}")
             .MapGet(GetPostItemWithPagination);
-       
+
         app.MapGroup(this)
             .RequireAuthorization()
             .MapPost(UploadFile, "/image-upload");
-        
+
         app.MapGroup(this)
             .AllowAnonymous()
             .MapGet(GetTagLists, "/tags");
     }
-    
-    public async Task<FileStorageInfo> UploadFile(
+
+    public async Task<UploadPostFileResponse> UploadFile(
         ISender sender,
         [FromForm] IFormFile file)
     {
         UploadedFile? uploadedFile = null;
-        if (file is { Length: > 0 })
+        if (file is
+            {
+                Length: > 0
+            })
         {
             uploadedFile = new UploadedFile(
                 file.OpenReadStream(),
@@ -50,15 +54,30 @@ public class Posts : EndpointGroupBase
             );
         }
 
-        return await sender.Send(new UploadFileCommand
+        var fileStorageInfo = await sender.Send(new UploadFileCommand
         {
-            File = uploadedFile ?? throw new InvalidOperationException(),
-            Category = FileCategory.Post
+            File = uploadedFile ?? throw new InvalidOperationException(), Category = FileCategory.Post
         });
+        
+        //warning: ExpiresOn is set to DateTime.MaxValue due to the content of post need to be permanent 
+        var url = await sender.Send(new GetUrlQuery(fileStorageInfo.StorageKey, FileCategory.Post, DateTime.MaxValue, true));
+        
+        return new UploadPostFileResponse
+        {
+            FileStorageInfo = fileStorageInfo,
+            Url = url
+        };
+    }
+
+    public class UploadPostFileResponse
+    {
+        public required FileStorageInfo FileStorageInfo{ get; set; }
+
+        public required string Url { get; set; }
     }
 
     public Task<string[]> GetTagLists(ISender sender) => sender.Send(new GetTagsQuery());
-    
+
     public Task<PostDto> GetPostDetail(ISender sender, Guid id) => sender.Send(new GetPostDetailQuery(id));
 
     public Task<PaginatedList<PostItemDto>> GetPostItemWithPagination(ISender sender,

@@ -11,8 +11,10 @@ public interface IFileStorageService
     /// </summary>
     /// <param name="key"></param>
     /// <param name="fileCategory"></param>
+    /// <param name="expiresOn"></param>
+    /// <param name="useCDN"></param>
     /// <returns></returns>
-    Task<string?> GetUrlAsync(string key, FileCategory fileCategory);
+    Task<string?> GetUrlAsync(string key, FileCategory fileCategory, DateTime expiresOn, bool useCDN = false);
 
     /// <summary>
     /// 上傳檔案到遠端儲存（如S3）

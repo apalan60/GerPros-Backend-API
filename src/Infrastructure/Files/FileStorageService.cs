@@ -6,16 +6,18 @@ using GerPros_Backend_API.Domain.Enums;
 using Microsoft.Extensions.Options;
 using ArgumentException = System.ArgumentException;
 
-namespace GerPros_Backend_API.Infrastructure.File;
+namespace GerPros_Backend_API.Infrastructure.Files;
 
-public class S3FileStorageService : IFileStorageService
+public class FileStorageService : IFileStorageService
 {
     private readonly IAmazonS3 _s3Client;
+    private readonly ICDNService _cdnService;
     private readonly S3Settings _s3Settings;
 
-    public S3FileStorageService(IAmazonS3 s3Client, IOptions<S3Settings> s3Setting)
+    public FileStorageService(IAmazonS3 s3Client, IOptions<S3Settings> s3Setting, ICDNService cdnService)
     {
         _s3Client = s3Client;
+        _cdnService = cdnService;
         _s3Settings = s3Setting.Value;
     }
 
@@ -44,7 +46,7 @@ public class S3FileStorageService : IFileStorageService
             return new FileStorageInfo
             {
                 Name = fileName,
-                Key = key.ToString() 
+                StorageKey = key.ToString() 
             };
         }
         catch (AmazonS3Exception amazonS3Exception)
@@ -59,15 +61,24 @@ public class S3FileStorageService : IFileStorageService
         throw new NotImplementedException();
     }
 
-    public async Task<string?> GetUrlAsync(string key, FileCategory fileCategory)
+    public async Task<string?> GetUrlAsync(string key, FileCategory fileCategory, DateTime expiresOn,
+        bool useCDN = false)
     {
+        string fileFullName = $"{fileCategory.ToString()}/{key}";
+        
+        if (useCDN)
+        {
+            var url = _cdnService.GenerateSignedUrl(fileFullName, expiresOn: expiresOn);
+            return url;
+        }
+
         var request = new GetPreSignedUrlRequest
         {
             BucketName = _s3Settings.BucketName,
-            Key = $"{fileCategory.ToString()}/{key}",
+            Key = fileFullName,
             Protocol = Protocol.HTTPS,
             Verb = HttpVerb.GET,
-            Expires = DateTime.UtcNow.AddMinutes(5),
+            Expires = expiresOn 
         };
 
         try
