@@ -41,7 +41,7 @@ public class CreatePostCommandValidator : AbstractValidator<CreatePostCommand>
         
         foreach (var file in fileStorageInfo)
         {
-            if (!await _fileStorageService.ExistsAsync(file.ImageKey, FileCategory.Post))
+            if (!await _fileStorageService.ExistsAsync(file.Key, FileCategory.Post))
             {
                 return false;
             }

@@ -106,6 +106,63 @@ namespace GerPros_Backend_API.Infrastructure.Data.Migrations
                     b.ToTable("FaqCategories");
                 });
 
+            modelBuilder.Entity("GerPros_Backend_API.Domain.Entities.Post", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CoverImage")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("FileStorageInfo")
+                        .HasColumnType("jsonb");
+
+                    b.Property<DateTimeOffset>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Posts");
+                });
+
+            modelBuilder.Entity("GerPros_Backend_API.Domain.Entities.PostTag", b =>
+                {
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TagId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("PostId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("PostTags");
+                });
+
             modelBuilder.Entity("GerPros_Backend_API.Domain.Entities.ProductItem", b =>
                 {
                     b.Property<Guid>("Id")
@@ -145,6 +202,33 @@ namespace GerPros_Backend_API.Infrastructure.Data.Migrations
                     b.HasIndex("SeriesId");
 
                     b.ToTable("ProductItems");
+                });
+
+            modelBuilder.Entity("GerPros_Backend_API.Domain.Entities.Tag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("GerPros_Backend_API.Domain.Entities.TodoItem", b =>
@@ -427,6 +511,25 @@ namespace GerPros_Backend_API.Infrastructure.Data.Migrations
                     b.Navigation("Brand");
                 });
 
+            modelBuilder.Entity("GerPros_Backend_API.Domain.Entities.PostTag", b =>
+                {
+                    b.HasOne("GerPros_Backend_API.Domain.Entities.Post", "Post")
+                        .WithMany("PostTags")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GerPros_Backend_API.Domain.Entities.Tag", "Tag")
+                        .WithMany("PostTags")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("Tag");
+                });
+
             modelBuilder.Entity("GerPros_Backend_API.Domain.Entities.ProductItem", b =>
                 {
                     b.HasOne("GerPros_Backend_API.Domain.Entities.BrandSeries", "BrandSeries")
@@ -531,6 +634,16 @@ namespace GerPros_Backend_API.Infrastructure.Data.Migrations
             modelBuilder.Entity("GerPros_Backend_API.Domain.Entities.BrandSeries", b =>
                 {
                     b.Navigation("ProductItems");
+                });
+
+            modelBuilder.Entity("GerPros_Backend_API.Domain.Entities.Post", b =>
+                {
+                    b.Navigation("PostTags");
+                });
+
+            modelBuilder.Entity("GerPros_Backend_API.Domain.Entities.Tag", b =>
+                {
+                    b.Navigation("PostTags");
                 });
 
             modelBuilder.Entity("GerPros_Backend_API.Domain.Entities.TodoList", b =>

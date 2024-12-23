@@ -47,8 +47,8 @@ public class UpdatePostCommandHandler(IApplicationDbContext context, IFileStorag
     {
         var newFileStorageInfo = request.FileStorageInfo ?? [];
         var oldFileStorageInfo = entity.FileStorageInfo ?? [];
-        var newFileStorageInfoKeys = newFileStorageInfo.Select(x => x.ImageKey).ToHashSet();
-        var removedFileStorageInfo = oldFileStorageInfo.Where(x => !newFileStorageInfoKeys.Contains(x.ImageKey)).ToArray();
-        await fileStorageService.DeleteAllAsync(removedFileStorageInfo.Select(x => x.ImageKey).ToArray(), FileCategory.Post, cancellationToken);
+        var newFileStorageInfoKeys = newFileStorageInfo.Select(x => x.Key).ToHashSet();
+        var removedFileStorageInfo = oldFileStorageInfo.Where(x => !newFileStorageInfoKeys.Contains(x.Key)).ToArray();
+        await fileStorageService.DeleteAllAsync(removedFileStorageInfo.Select(x => x.Key).ToArray(), FileCategory.Post, cancellationToken);
     }
 }

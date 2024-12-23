@@ -10,8 +10,6 @@ public class UploadFileCommand : IRequest<FileStorageInfo>
     public UploadedFile File { get; init; } = null!;
     
     public required FileCategory Category { get; init; }
-    
-    public bool IsPublic { get; init; } = false;
 }
 
 
@@ -24,8 +22,7 @@ public class UploadFileCommandHandler(IFileStorageService fileStorageService) : 
             request.File.FileName ?? throw new InvalidOperationException(), 
             request.File.ContentType ?? "application/octet-stream",
             request.Category,
-            cancellationToken,
-            request.IsPublic
+            cancellationToken
         );
     }
 } 

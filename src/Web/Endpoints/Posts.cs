@@ -6,6 +6,7 @@ using GerPros_Backend_API.Application.Posts.Commands.UpdatePost;
 using GerPros_Backend_API.Application.Posts.Queries.GetPost;
 using GerPros_Backend_API.Application.Posts.Queries.GetPostsWithPagination;
 using GerPros_Backend_API.Application.Posts.Queries.GetTags;
+using GerPros_Backend_API.Domain;
 using GerPros_Backend_API.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,10 +33,10 @@ public class Posts : EndpointGroupBase
         
         app.MapGroup(this)
             .AllowAnonymous()
-            .MapGet(GetTagLists);
+            .MapGet(GetTagLists, "/tags");
     }
     
-    public async Task<string> UploadFile(
+    public async Task<FileStorageInfo> UploadFile(
         ISender sender,
         [FromForm] IFormFile file)
     {
@@ -52,8 +53,7 @@ public class Posts : EndpointGroupBase
         return await sender.Send(new UploadFileCommand
         {
             File = uploadedFile ?? throw new InvalidOperationException(),
-            Category = FileCategory.Post,
-            IsPublic = true
+            Category = FileCategory.Post
         });
     }
 

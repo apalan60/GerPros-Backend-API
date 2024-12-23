@@ -28,22 +28,23 @@ public class UpdateProductCommandHandler(IApplicationDbContext context, IFileSto
             .FindAsync([request.Id], cancellationToken);
         Guard.Against.NotFound(request.Id, entity);
         
-        string? imageUrl = null;
+        string? imageKey = null;
         if (request.File?.Content is { Length: > 0 })
         {
-            imageUrl = await fileStorageService.UploadAsync(
+            var fileInfo = await fileStorageService.UploadAsync(
                 request.File.Content,
                 request.File.FileName ?? "unknown",
                 request.File.ContentType ?? "application/octet-stream",
                 FileCategory.Product,
                 cancellationToken
             );
+            imageKey = fileInfo.Key;
         }
 
         entity.SeriesId = request.SeriesId ?? entity.SeriesId;
         entity.Name = request.Name ?? entity.Name;
         entity.Price = request.Price ?? entity.Price;
-        entity.Image = imageUrl ?? entity.Image; 
+        entity.Image = imageKey ?? entity.Image; 
         entity.Detail = request.Detail ?? entity.Detail;
 
         await context.SaveChangesAsync(cancellationToken);
