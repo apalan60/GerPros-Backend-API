@@ -4,7 +4,7 @@ using GerPros_Backend_API.Application.Common.Interfaces;
 using GerPros_Backend_API.Domain.Constants;
 using GerPros_Backend_API.Infrastructure.Data;
 using GerPros_Backend_API.Infrastructure.Data.Interceptors;
-using GerPros_Backend_API.Infrastructure.File;
+using GerPros_Backend_API.Infrastructure.Files;
 using GerPros_Backend_API.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -56,7 +56,8 @@ public static class DependencyInjection
         services.AddAuthorization(options =>
             options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator)));
 
-        services.AddSingleton<IFileStorageService, S3FileStorageService>();
+        services.AddSingleton<IFileStorageService, FileStorageService>();
+        services.AddSingleton<ICDNService, CloudFrontService>();
         
         // S3 setting
         services.Configure<S3Settings>(configuration.GetSection("S3Settings"));
@@ -69,6 +70,9 @@ public static class DependencyInjection
             };
             return new AmazonS3Client(config);
         });
+        
+        // CloudFront setting
+        services.Configure<CloudFrontSettings>(configuration.GetSection("CloudFrontSettings"));
         
         return services;
     }

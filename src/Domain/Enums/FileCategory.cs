@@ -4,5 +4,6 @@ public enum FileCategory
 {
     Product,
     Contact,
-    Topic
+    Topic,
+    Post
 }

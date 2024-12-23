@@ -1,4 +1,5 @@
-﻿using GerPros_Backend_API.Domain.Enums;
+﻿using GerPros_Backend_API.Domain;
+using GerPros_Backend_API.Domain.Enums;
 
 namespace GerPros_Backend_API.Application.Common.Interfaces;
 
@@ -10,8 +11,10 @@ public interface IFileStorageService
     /// </summary>
     /// <param name="key"></param>
     /// <param name="fileCategory"></param>
+    /// <param name="expiresOn"></param>
+    /// <param name="useCDN"></param>
     /// <returns></returns>
-    Task<string?> GetUrlAsync(string key, FileCategory fileCategory);
+    Task<string?> GetUrlAsync(string key, FileCategory fileCategory, DateTime expiresOn, bool useCDN = false);
 
     /// <summary>
     /// 上傳檔案到遠端儲存（如S3）
@@ -22,11 +25,13 @@ public interface IFileStorageService
     /// <param name="fileCategory"></param>
     /// <param name="cancellationToken"></param>
     /// <returns>上傳後可供外部存取的檔案URL</returns>
-    Task<string> UploadAsync(Stream fileStream, string fileName, string contentType,
+    Task<FileStorageInfo> UploadAsync(Stream fileStream, string fileName, string contentType,
         FileCategory fileCategory,
         CancellationToken cancellationToken);
 
     Task<string> GetUploadPreSignedUrl(string fileName, string contentType, FileCategory fileCategory, CancellationToken cancellationToken);
     
     Task<bool> DeleteAsync(string key, FileCategory fileCategory, CancellationToken cancellationToken);
+    Task<bool> DeleteAllAsync(ICollection<string> key, FileCategory fileCategory, CancellationToken cancellationToken);
+    Task<bool> ExistsAsync(string key, FileCategory fileCategory);
 }

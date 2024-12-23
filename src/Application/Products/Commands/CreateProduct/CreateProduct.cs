@@ -29,16 +29,17 @@ public class CreateProductItemCommandHandler(IApplicationDbContext context, IFil
             .FirstOrDefaultAsync(cancellationToken);
         Guard.Against.NotFound(request.SeriesId, series);
 
-        string? imageUrl = null;
+        string? imageKey = null;
         if (request.File?.Content is { Length: > 0 })
         {
-            imageUrl = await fileStorageService.UploadAsync(
+            var fileInfo = await fileStorageService.UploadAsync(
                 request.File.Content,
                 request.File.FileName ?? "unknown",
                 request.File.ContentType ?? "application/octet-stream",
                 FileCategory.Product,
                 cancellationToken
             );
+            imageKey = fileInfo.StorageKey;
         }
 
         var entity = new ProductItem
@@ -47,7 +48,7 @@ public class CreateProductItemCommandHandler(IApplicationDbContext context, IFil
             SeriesId = request.SeriesId,
             Name = request.Name,
             Price = request.Price,
-            Image = imageUrl,
+            Image = imageKey,
             Detail = request.Detail
         };
 

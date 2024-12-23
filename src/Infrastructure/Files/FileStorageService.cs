@@ -1,24 +1,28 @@
 ﻿using Amazon.S3;
 using Amazon.S3.Model;
 using GerPros_Backend_API.Application.Common.Interfaces;
+using GerPros_Backend_API.Domain;
 using GerPros_Backend_API.Domain.Enums;
 using Microsoft.Extensions.Options;
+using ArgumentException = System.ArgumentException;
 
-namespace GerPros_Backend_API.Infrastructure.File;
+namespace GerPros_Backend_API.Infrastructure.Files;
 
-public class S3FileStorageService : IFileStorageService
+public class FileStorageService : IFileStorageService
 {
     private readonly IAmazonS3 _s3Client;
+    private readonly ICDNService _cdnService;
     private readonly S3Settings _s3Settings;
 
-    public S3FileStorageService(IAmazonS3 s3Client, IOptions<S3Settings> s3Setting)
+    public FileStorageService(IAmazonS3 s3Client, IOptions<S3Settings> s3Setting, ICDNService cdnService)
     {
         _s3Client = s3Client;
+        _cdnService = cdnService;
         _s3Settings = s3Setting.Value;
     }
 
     
-    public async Task<string> UploadAsync(Stream fileStream, string fileName, string contentType,
+    public async Task<FileStorageInfo> UploadAsync(Stream fileStream, string fileName, string contentType,
         FileCategory fileCategory,
         CancellationToken cancellationToken)
     {
@@ -39,7 +43,11 @@ public class S3FileStorageService : IFileStorageService
         try
         {
             await _s3Client.PutObjectAsync(request, cancellationToken);
-            return key.ToString();
+            return new FileStorageInfo
+            {
+                Name = fileName,
+                StorageKey = key.ToString() 
+            };
         }
         catch (AmazonS3Exception amazonS3Exception)
         {
@@ -53,15 +61,24 @@ public class S3FileStorageService : IFileStorageService
         throw new NotImplementedException();
     }
 
-    public async Task<string?> GetUrlAsync(string key, FileCategory fileCategory)
+    public async Task<string?> GetUrlAsync(string key, FileCategory fileCategory, DateTime expiresOn,
+        bool useCDN = false)
     {
+        string fileFullName = $"{fileCategory.ToString()}/{key}";
+        
+        if (useCDN)
+        {
+            var url = _cdnService.GenerateSignedUrl(fileFullName, expiresOn: expiresOn);
+            return url;
+        }
+
         var request = new GetPreSignedUrlRequest
         {
             BucketName = _s3Settings.BucketName,
-            Key = $"{fileCategory.ToString()}/{key}",
+            Key = fileFullName,
             Protocol = Protocol.HTTPS,
             Verb = HttpVerb.GET,
-            Expires = DateTime.UtcNow.AddMinutes(5),
+            Expires = expiresOn 
         };
 
         try
@@ -87,12 +104,50 @@ public class S3FileStorageService : IFileStorageService
             .ContinueWith(task => task.Result.HttpStatusCode == System.Net.HttpStatusCode.NoContent, cancellationToken);
     }
 
+    public Task<bool> DeleteAllAsync(ICollection<string> key, FileCategory fileCategory, CancellationToken cancellationToken)
+    {
+        var request = new DeleteObjectsRequest
+        {
+            BucketName = _s3Settings.BucketName,
+            Objects = key.Select(k => new KeyVersion { Key = $"{fileCategory.ToString()}/{k}" }).ToList(),
+        };
+
+        return _s3Client.DeleteObjectsAsync(request, cancellationToken)
+            .ContinueWith(task => task.Result.HttpStatusCode == System.Net.HttpStatusCode.OK, cancellationToken);
+    }
+
+
+    public async Task<bool> ExistsAsync(string key, FileCategory fileCategory)
+    {
+        var fileKey = $"{fileCategory.ToString()}/{key}";
+        var request = new GetObjectMetadataRequest
+        {
+            BucketName = _s3Settings.BucketName,
+            Key = fileKey,
+        };
+        
+        try
+        {
+            await _s3Client.GetObjectMetadataAsync(request);
+            return true;
+        }
+        catch (AmazonS3Exception ex)
+        {
+            if (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return false;
+            }
+            throw new Exception($"Error checking file existence: '{ex.Message}'");
+        }
+    }
+
     private async Task CreateBucketIfNotExisted()
     {
-        var bucketExists = await BucketExistsAsync(_s3Client, _s3Settings.BucketName);
+        string bucketName = _s3Settings.BucketName;
+        var bucketExists = await BucketExistsAsync(_s3Client, bucketName);
         if (!bucketExists)
         {
-            var result = await CreateBucketAsync(_s3Client, _s3Settings.BucketName);
+            var result = await CreateBucketAsync(_s3Client, bucketName);
             if (!result)
             {
                 throw new Exception("Error creating bucket.");
@@ -157,7 +212,11 @@ public class S3FileStorageService : IFileStorageService
     {
         try
         {
-            var request = new PutBucketRequest { BucketName = bucketName, UseClientRegion = true, };
+            var request = new PutBucketRequest
+            {
+                BucketName = bucketName, 
+                UseClientRegion = true,
+            };
 
             var response = await client.PutBucketAsync(request);
             return response.HttpStatusCode == System.Net.HttpStatusCode.OK;

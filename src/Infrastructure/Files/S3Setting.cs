@@ -1,4 +1,4 @@
-﻿namespace GerPros_Backend_API.Infrastructure.File;
+﻿namespace GerPros_Backend_API.Infrastructure.Files;
 
 public sealed class S3Settings
 {

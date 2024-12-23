@@ -95,6 +95,20 @@ docker tag gerpros/api:latest 058264288018.dkr.ecr.ap-northeast-1.amazonaws.com/
 docker push 058264288018.dkr.ecr.ap-northeast-1.amazonaws.com/gerpros/api:latest
 ```
 
+## AWS CloudFront
+
+Create a key group(using OpenSSL)
+OpenSSL would be installed when installing Git Bash 
+- private key
+```git bash
+openssl genrsa -out private_key.pem 2048
+```
+
+- public key
+```git bash
+openssl rsa -pubout -in private_key.pem -out public_key.pem
+```
+
 ## Database
 - quick test database login using psql 
 ```shell
@@ -110,7 +124,7 @@ docker push 058264288018.dkr.ecr.ap-northeast-1.amazonaws.com/gerpros/api:latest
 
 from root folder '\GerPros\GerPros-Backend-API> '
 ```bash
-dotnet ef migrations add "AddFAQTable" --project src/Infrastructure --startup-project src/Web --output-dir Data/Migrations
+dotnet ef migrations add "UpdateFileStorageInfo" --project src/Infrastructure --startup-project src/Web --output-dir Data/Migrations
 
 ```
 

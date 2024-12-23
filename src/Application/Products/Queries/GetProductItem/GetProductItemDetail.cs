@@ -21,7 +21,7 @@ public class GetProductItemDetailQueryHandler(IApplicationDbContext context, IFi
 
         if (entity.Image != null)
         {
-            entity.Image = await fileStorageService.GetUrlAsync(entity.Image, FileCategory.Product);
+            entity.Image = await fileStorageService.GetUrlAsync(entity.Image, FileCategory.Product, DateTime.UtcNow.AddMinutes(30));
         }
 
         return entity.ToDto();
