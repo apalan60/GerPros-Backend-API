@@ -10,18 +10,29 @@ public class DeletePostCommandHandler(IApplicationDbContext context, IFileStorag
 {
     public async Task Handle(DeletePostCommand request, CancellationToken cancellationToken)
     {
-        var entity = await context.Posts
+        var post = await context.Posts
             .FindAsync([request.Id], cancellationToken);
 
-        Guard.Against.NotFound(request.Id.ToString(), entity);
+        Guard.Against.NotFound(request.Id.ToString(), post);
 
-        context.Posts.Remove(entity);
+        var postTags = await context.PostTags
+            .Where(pt => pt.PostId == request.Id)
+            .ToListAsync(cancellationToken);
+
+        context.Posts.Remove(post);
+        context.PostTags.RemoveRange(postTags);
+
+        var unusedTags = await context.Tags
+            .Where(t => t.PostTags != null && t.PostTags.Count == 0)
+            .ToListAsync(cancellationToken);
+
+        context.Tags.RemoveRange(unusedTags);
 
         await context.SaveChangesAsync(cancellationToken);
 
-        if (entity.FileStorageInfo!= null)
+        if (post.FileStorageInfo != null)
         {
-            foreach (var file in entity.FileStorageInfo)
+            foreach (var file in post.FileStorageInfo)
             {
                 await fileStorageService.DeleteAsync(file.StorageKey, FileCategory.Post, cancellationToken);
             }

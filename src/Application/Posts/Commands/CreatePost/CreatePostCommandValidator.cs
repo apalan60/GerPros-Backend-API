@@ -36,7 +36,7 @@ public class CreatePostCommandValidator : AbstractValidator<CreatePostCommand>
     {
         if (fileStorageInfo == null || fileStorageInfo.Length == 0)
         {
-            return false;
+            return true;
         }
         
         foreach (var file in fileStorageInfo)
