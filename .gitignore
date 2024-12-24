@@ -481,3 +481,5 @@ $RECYCLE.BIN/
 .azure
 /private_key.pem
 /public_key.pem
+/gerpros-api.ppk
+/gerpros-key.pem
