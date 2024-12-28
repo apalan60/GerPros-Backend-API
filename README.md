@@ -87,11 +87,14 @@ docker push apalan600/gerpros-backend-api:latest
 docker build -t gerpros/api .
 ```
 
+
 ```bash
 docker tag gerpros/api:latest 058264288018.dkr.ecr.ap-northeast-1.amazonaws.com/gerpros/api:latest
 ```
 
 ```bash
+## USE AWS CLI to login first
+## or use AWS Tookit instead
 docker push 058264288018.dkr.ecr.ap-northeast-1.amazonaws.com/gerpros/api:latest
 ```
 
