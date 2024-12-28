@@ -3,7 +3,7 @@
 ###
 
 # Seed Data
-POST {{Web_HostAddress}}/api/Utility
+POST {{Web_HostAddress}}/api/Utility/SeedDatabase
 Content-Type: application/json
 
 {

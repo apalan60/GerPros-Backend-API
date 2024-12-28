@@ -7,12 +7,23 @@ public class Utility: EndpointGroupBase
     public override void Map(WebApplication app)
     {
         app.MapGroup(this)
-            .MapPost(SeedDatabase);
+            .RequireSecretKeyValidation()
+            .MapPost(SeedDatabase, "SeedDatabase")
+            .MapGet(GetConfig, "Config");
     }
     
     public async Task<IResult> SeedDatabase(ISender sender, SeedDatabaseCommand command)
     {
         await sender.Send(command);
         return Results.NoContent();
+    }
+    
+    public Task<List<string?>> GetConfig(IConfiguration configuration)
+    {
+        return Task.FromResult((List<string?>)
+        [
+            configuration["ConnectionStrings:DefaultConnection"],
+            configuration["CloudFrontSettings:PrivateKey"],
+        ]);
     }
 }

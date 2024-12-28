@@ -1,8 +1,8 @@
 ﻿# TODO
 
-- use ECS to run image from ECR
+- CORS - S3 EC2 CloudFront  (or some integration in ECS?)
 
-- integrate with AWS RDS / docker compose?
+- integrate with AWS RDS 
 
 - 請GerPros整理產品資訊、圖片，存放於demo data setting, 留一個flag，有需要就起站台時塞入DB
 

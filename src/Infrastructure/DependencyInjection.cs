@@ -74,6 +74,9 @@ public static class DependencyInjection
         // CloudFront setting
         services.Configure<CloudFrontSettings>(configuration.GetSection("CloudFrontSettings"));
         
+        // Secret setting
+        services.Configure<SecretSettings>(configuration.GetSection("SecretSettings"));
+        
         return services;
     }
 }
