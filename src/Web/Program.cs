@@ -3,6 +3,23 @@ using GerPros_Backend_API.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// add system manager parameter store
+var awsOptions = builder.Configuration.GetAWSOptions();
+var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
+builder.Configuration.AddSystemsManager(config =>
+{
+    config.AwsOptions = awsOptions;
+    config.Path = $"/gerpros/{environment}";
+    config.Optional = false;
+    config.ReloadAfter = TimeSpan.FromDays(1);
+    config.OnLoadException += exceptionContext =>
+    {
+        Console.WriteLine($"Error loading parameter: {exceptionContext.Exception.Message}");
+        exceptionContext.Ignore = false; // 是否忽略加載錯誤
+    };
+});
+
+
 // Add services to the container.
 builder.Services.AddKeyVaultIfConfigured(builder.Configuration);
 
@@ -69,4 +86,6 @@ app.MapEndpoints();
 
 app.Run();
 
-public partial class Program { }
+public partial class Program
+{
+}
