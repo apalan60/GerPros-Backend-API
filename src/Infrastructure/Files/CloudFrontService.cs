@@ -15,8 +15,8 @@ public class CloudFrontService : ICDNService
         _domainName = settings.Value.DomainName;
         _keyPairId = settings.Value.KeyPairId;
         _privateKey = settings.Value.PrivateKey;
-        string? privateKeyPath = settings.Value.PrivateKeyPath;
 #if DEBUG
+        string? privateKeyPath = settings.Value.PrivateKeyPath;
         if (!string.IsNullOrEmpty(privateKeyPath))
         {
             _privateKey = File.ReadAllText($"{privateKeyPath}");
@@ -37,13 +37,22 @@ public class CloudFrontService : ICDNService
 
         using var privateKeyReader = new StringReader(_privateKey);
 
-        string signedUrl = AmazonCloudFrontUrlSigner.GetCannedSignedURL(
-            url, 
-            privateKeyReader, 
-            _keyPairId, 
-            expiresOn 
-        );
+        try
+        {
+            string signedUrl = AmazonCloudFrontUrlSigner.GetCannedSignedURL(
+                url,
+                privateKeyReader,
+                _keyPairId,
+                expiresOn
+            );
 
-        return signedUrl;
+            return signedUrl;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("exception:" + e);
+            Console.WriteLine("privateKey:" + _privateKey);
+            throw;
+        }
     }
 }

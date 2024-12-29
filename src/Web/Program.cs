@@ -1,3 +1,4 @@
+using Amazon;
 using GerPros_Backend_API.Infrastructure;
 using GerPros_Backend_API.Infrastructure.Data;
 
@@ -5,6 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // add system manager parameter store
 var awsOptions = builder.Configuration.GetAWSOptions();
+awsOptions.Region ??= RegionEndpoint.GetBySystemName(builder.Configuration["AWS:Region"]);
+
 var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
 builder.Configuration.AddSystemsManager(config =>
 {
@@ -18,7 +21,6 @@ builder.Configuration.AddSystemsManager(config =>
         exceptionContext.Ignore = false; // 是否忽略加載錯誤
     };
 });
-
 
 // Add services to the container.
 builder.Services.AddKeyVaultIfConfigured(builder.Configuration);
