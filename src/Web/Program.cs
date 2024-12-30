@@ -86,6 +86,9 @@ app.Map("/", () => Results.Redirect("/api"));
 
 app.MapEndpoints();
 
+//health check
+app.UseHealthChecks("/health");
+
 app.Run();
 
 public partial class Program

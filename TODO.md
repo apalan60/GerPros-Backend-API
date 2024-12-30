@@ -1,5 +1,7 @@
 ﻿# TODO
 
+- Email Service && API
+
 - CORS - S3 EC2 CloudFront  (or some integration in ECS?)
 
 - integrate with AWS RDS 
@@ -13,7 +15,9 @@
     - [CloudFront-SignedUrl](https://stackoverflow.com/questions/55723691/what-is-the-maximum-expiration-time-for-cloudfront-signed-url/55729193#55729193)
     - [Discussion of long term storage of s3 pre-signed url](https://stackoverflow.com/questions/55827584/how-to-give-long-term-read-access-to-objects-in-a-private-s3-bucket) 
 
-- Health Check
+ Image Tag(automated)
+
+- Code Pipeline
 
 ## Note
 
