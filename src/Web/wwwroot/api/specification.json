@@ -1273,7 +1273,7 @@
         ]
       }
     },
-    "/api/Utility": {
+    "/api/Utility/SeedDatabase": {
       "post": {
         "tags": [
           "Utility"
@@ -1294,6 +1294,29 @@
         "responses": {
           "200": {
             "description": ""
+          }
+        }
+      }
+    },
+    "/api/Utility/Config": {
+      "get": {
+        "tags": [
+          "Utility"
+        ],
+        "operationId": "GetConfig",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -1973,12 +1996,7 @@
       },
       "SeedDatabaseCommand": {
         "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "secretKey": {
-            "type": "string"
-          }
-        }
+        "additionalProperties": false
       }
     },
     "securitySchemes": {

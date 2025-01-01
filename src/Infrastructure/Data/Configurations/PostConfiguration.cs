@@ -19,7 +19,7 @@ public class PostConfiguration : IEntityTypeConfiguration<Post>
             .HasMaxLength(500);
 
         builder.Property(p => p.CoverImage)
-            .HasMaxLength(200);
+            .HasMaxLength(500);
 
         builder.Property(p => p.FileStorageInfo)
             .HasColumnType("jsonb")

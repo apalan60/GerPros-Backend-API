@@ -127,7 +127,7 @@ openssl rsa -pubout -in private_key.pem -out public_key.pem
 
 from root folder '\GerPros\GerPros-Backend-API> '
 ```bash
-dotnet ef migrations add "UpdateFileStorageInfo" --project src/Infrastructure --startup-project src/Web --output-dir Data/Migrations
+dotnet ef migrations add "UpdatePostImageUrlMaxLength" --project src/Infrastructure --startup-project src/Web --output-dir Data/Migrations
 
 ```
 

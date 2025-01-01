@@ -14,9 +14,16 @@ public class CreatePostCommandValidator : AbstractValidator<CreatePostCommand>
         RuleFor(v => v.Title)
             .MaximumLength(30)
             .NotEmpty();
+        
+        RuleFor(v => v.Description)
+            .MaximumLength(500)
+            .WithMessage("簡介最多500字，或連絡管理員協助調整");
 
         RuleFor(v => v.CoverImage)
             .NotNull()
+            .WithMessage("CoverImage is required.")
+            .MaximumLength(500)
+            .WithMessage("Maximum length of CoverImage is 500 characters.")
             .When(v => v.FileStorageInfo == null)
             .WithMessage("ImageKeys is required when CoverImage is not null.");
         
