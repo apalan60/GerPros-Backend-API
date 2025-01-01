@@ -29,7 +29,7 @@ public class AwsSesEmailService : IEmailService
         var message = new MimeMessage();
 
         message.From.Add(new MailboxAddress("Web Contact", _verifiedSenderEmail));
-        message.To.Add(new MailboxAddress("Admin", formData.Email));
+        message.To.Add(new MailboxAddress("Admin", _verifiedSenderEmail));
 
         message.Subject = $"聯絡我們-表單內容 - {formData.LastName}{formData.FirstName}";
         var bodyBuilder = new BodyBuilder
