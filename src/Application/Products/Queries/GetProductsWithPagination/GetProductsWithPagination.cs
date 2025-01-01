@@ -17,7 +17,9 @@ public record GetProductWithPaginationQuery : IRequest<PaginatedList<ProductItem
     public int PageSize { get; init; } = 10;
 }
 
-public class GetProductsWithPaginationQueryHandler(IApplicationDbContext context, IFileStorageService fileStorageService)
+public class GetProductsWithPaginationQueryHandler(
+    IApplicationDbContext context,
+    IFileStorageService fileStorageService)
     : IRequestHandler<GetProductWithPaginationQuery,
         PaginatedList<ProductItemDto>>
 {
@@ -46,13 +48,13 @@ public class GetProductsWithPaginationQueryHandler(IApplicationDbContext context
             if (request.Series is null)
             {
                 result = await GetPaginatedProductsAsync(
-                    x => x.BrandSeries.BrandId == brandId,
+                    x => x.BrandSeries.BrandId == brandId && x.BrandSeries.Name == request.Series,
                     request.PageNumber,
                     request.PageSize);
             }
 
             result = await GetPaginatedProductsAsync(
-                x => x.BrandSeries.BrandId == brandId && x.BrandSeries.Name == request.Series,
+                x => x.BrandSeries.BrandId == brandId,
                 request.PageNumber,
                 request.PageSize);
         }
@@ -66,16 +68,21 @@ public class GetProductsWithPaginationQueryHandler(IApplicationDbContext context
         }
 
         if (result is null)
-            throw new Exception("Invalid query parameters, please provide either BrandId and SeriesId or Brand and Series or Brand or none.");
+            throw new Exception(
+                "Invalid query parameters, please provide either BrandId and SeriesId or Brand and Series or Brand or none.");
 
         foreach (var item in result.Items)
         {
             if (item.Image is not null)
             {
-                item.Image = await fileStorageService.GetUrlAsync(item.Image, FileCategory.Product, DateTime.UtcNow.AddMinutes(30));
+                item.Image = await fileStorageService.GetUrlAsync(item.Image, FileCategory.Product,
+                    DateTime.UtcNow.AddMinutes(30));
             }
         }
-        return result ?? throw new Exception("Invalid query parameters, please provide either BrandId and SeriesId or Brand and Series or Brand or none.");
+
+        return result ??
+               throw new Exception(
+                   "Invalid query parameters, please provide either BrandId and SeriesId or Brand and Series or Brand or none.");
     }
 
     private async Task<PaginatedList<ProductItemDto>> GetPaginatedProductsAsync(
