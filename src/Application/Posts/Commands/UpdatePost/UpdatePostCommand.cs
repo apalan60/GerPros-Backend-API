@@ -42,6 +42,12 @@ public class UpdatePostCommandHandler(IApplicationDbContext context, IFileStorag
             .ToListAsync(cancellationToken);
 
         context.Tags.RemoveRange(unusedTags);
+        
+        entity.Title = request.Title;
+        entity.Description = request.Description;
+        entity.Content = request.Content;
+        entity.CoverImage = request.CoverImage;
+        entity.FileStorageInfo = request.FileStorageInfo;
 
 
         await context.SaveChangesAsync(cancellationToken);

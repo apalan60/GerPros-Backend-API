@@ -2,13 +2,13 @@
 
 public class Post : BaseAuditableEntity
 {
-    public string Title { get; init; } = null!;
+    public string Title { get; set; } = null!;
 
-    public string? Description { get; init; }
+    public string? Description { get; set; }
 
-    public string? Content { get; init; }
+    public string? Content { get; set; }
 
-    public string? CoverImage { get; init; }
+    public string? CoverImage { get; set; }
 
     public virtual ICollection<PostTag> PostTags { get; init; } = [];
     
