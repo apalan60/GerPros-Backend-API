@@ -10,17 +10,14 @@ namespace GerPros_Backend_API.Infrastructure.Mails;
 
 public class AwsSesEmailService : IEmailService
 {
-    private readonly string _awsAccessKey;
-    private readonly string _awsSecretKey;
-    private readonly RegionEndpoint _awsRegion;
+    private readonly string _regionName;
     private readonly string _verifiedSenderEmail;
 
-    public AwsSesEmailService(string awsAccessKey, string awsSecretKey, string regionName,
+    public AwsSesEmailService(string regionName,
         string verifiedSenderEmail)
     {
-        _awsAccessKey = awsAccessKey;
-        _awsSecretKey = awsSecretKey;
-        _awsRegion = RegionEndpoint.GetBySystemName(regionName);
+        _regionName = regionName;
+        RegionEndpoint.GetBySystemName(regionName);
         _verifiedSenderEmail = verifiedSenderEmail;
     }
 
@@ -79,7 +76,7 @@ public class AwsSesEmailService : IEmailService
         await message.WriteToAsync(ms);
         ms.Position = 0;
 
-        using var client = new AmazonSimpleEmailServiceClient(_awsAccessKey, _awsSecretKey, _awsRegion);
+        using var client = new AmazonSimpleEmailServiceClient(RegionEndpoint.GetBySystemName(_regionName));
 
         var sendRequest = new SendRawEmailRequest { RawMessage = new RawMessage(ms) };
 

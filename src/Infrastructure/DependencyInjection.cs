@@ -81,10 +81,8 @@ public static class DependencyInjection
         // Email Service
         services.AddSingleton<IEmailService>(sp =>
         {
-            var credentials = FallbackCredentialsFactory.GetCredentials();
             var region = RegionEndpoint.GetBySystemName(configuration["AWS:Region"]);
-            return new AwsSesEmailService(credentials.GetCredentials().AccessKey,
-                credentials.GetCredentials().SecretKey, region.SystemName, configuration["SES:VerifiedSenderEmail"]!);
+            return new AwsSesEmailService(region.SystemName, configuration["SES:VerifiedSenderEmail"]!);
         });
         // services.AddSingleton<IEmailService>(sp =>
         // {
