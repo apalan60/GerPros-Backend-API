@@ -23,8 +23,10 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services,
         IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
-
+        string? connectionString = configuration.GetConnectionString(configuration["ASPNETCORE_ENVIRONMENT"] == "Development"
+            ? "DefaultConnection"
+            : "RDSConnection");
+        
         Guard.Against.Null(connectionString, message: "Connection string 'DefaultConnection' not found.");
 
         services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();

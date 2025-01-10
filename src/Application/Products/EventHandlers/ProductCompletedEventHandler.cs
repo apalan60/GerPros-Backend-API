@@ -1,14 +1,13 @@
-﻿using GerPros_Backend_API.Application.TodoItems.EventHandlers;
-using GerPros_Backend_API.Domain.Events;
+﻿using GerPros_Backend_API.Domain.Events;
 using Microsoft.Extensions.Logging;
 
 namespace GerPros_Backend_API.Application.Products.EventHandlers;
 
 public class ProductCompletedEventHandler : INotificationHandler<ProductItemCreatedEvent>
 {
-    private readonly ILogger<TodoItemCompletedEventHandler> _logger;
+    private readonly ILogger<ProductCreatedEventHandler> _logger;
 
-    public ProductCompletedEventHandler(ILogger<TodoItemCompletedEventHandler> logger)
+    public ProductCompletedEventHandler(ILogger<ProductCreatedEventHandler> logger)
     {
         _logger = logger;
     }

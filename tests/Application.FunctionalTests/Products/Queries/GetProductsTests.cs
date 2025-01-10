@@ -69,9 +69,10 @@ public class GetProductsTests : BaseTestFixture
             PageSize = 10
         };
         var result = await SendAsync(query);
-        result.Items.Should().HaveCount(2);
+        result.Items.Should().HaveCount(3);
         result.Items.Should().Contain(x => x.Name == "Test Product 1");
         result.Items.Should().Contain(x => x.Name == "Test Product 2");
+        result.Items.Should().Contain(x => x.Name == "Test Product 3");
     }
 
     [Test]

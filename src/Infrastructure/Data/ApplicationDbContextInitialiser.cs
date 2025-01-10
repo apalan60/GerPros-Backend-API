@@ -90,36 +90,23 @@ public class ApplicationDbContextInitialiser
             }
         }
 
-        // Default data
-        // Seed, if necessary
-        if (!_context.TodoLists.Any())
-        {
-            _context.TodoLists.Add(new TodoList
-            {
-                Title = "Todo List",
-                Items =
-                {
-                    new TodoItem { Title = "Make a todo list 📃" },
-                    new TodoItem { Title = "Check off the first item ✅" },
-                    new TodoItem { Title = "Realise you've already done two things on the list! 🤯" },
-                    new TodoItem { Title = "Reward yourself with a nice, long nap 🏆" },
-                }
-            });
-
-            await _context.SaveChangesAsync();
-        }
-
         // Seed Brands and BrandSeries if necessary
         if (!_context.Brands.Any())
         {
-            var artfloorBrand = new Brand { Name = "Artfloor" };
-            var arteoBrand = new Brand { Name = "Arteo" };
+            //Arteo 人字拼 一般款
+            //ART AU系列 AR系列
+            
+            var artAuBrand = new Brand { Name = "ART" };
+            var arteoBrand = new Brand { Name = "ARTEO" };
 
-            var urbanSeries = new BrandSeries { Name = "Urban", BrandId = artfloorBrand.Id };
-            var normalSeries = new BrandSeries { Name = "normal", BrandId = arteoBrand.Id };
+            var humanSeries = new BrandSeries { Name = "人字拼", BrandId = arteoBrand.Id };
+            var normalSeries = new BrandSeries { Name = "一般款", BrandId = arteoBrand.Id };
+            
+            var artAuSeries = new BrandSeries { Name = "AU系列", BrandId = artAuBrand.Id };
+            var artArSeries = new BrandSeries { Name = "AR系列", BrandId = artAuBrand.Id };
 
-            _context.Brands.AddRange(artfloorBrand, arteoBrand);
-            _context.BrandSeries.AddRange(urbanSeries, normalSeries);
+            _context.Brands.AddRange(artAuBrand, arteoBrand);
+            _context.BrandSeries.AddRange(humanSeries, normalSeries, artAuSeries, artArSeries);
 
             await _context.SaveChangesAsync();
         }
@@ -127,25 +114,12 @@ public class ApplicationDbContextInitialiser
         // Seed ProductItem if necessary
         if (!_context.ProductItems.Any())
         {
-            var artfloorBrand = await _context.Brands.FirstOrDefaultAsync(b => b.Name == "Artfloor");
-            var arteoBrand = await _context.Brands.FirstOrDefaultAsync(b => b.Name == "Arteo");
-
-            var urbanSeries = await _context.BrandSeries.FirstOrDefaultAsync(s => s.Name == "Urban");
             var normalSeries = await _context.BrandSeries.FirstOrDefaultAsync(s => s.Name == "normal");
 
-            if (urbanSeries != null && normalSeries != null)
+            if ( normalSeries != null)
             {
                 _context.ProductItems.AddRange(new List<ProductItem>
                 {
-                    new()
-                    {
-                        Name = "奶油色橡木",
-                        Price = 7200.00M,
-                        Image =
-                            "https://your-s3-bucket.s3.amazonaws.com/images/product1.jpg?AWSAccessKeyId=AKIAIOSFODNN7...&Expires=1600000000&Signature=abcdefghij...",
-                        SeriesId = urbanSeries.Id,
-                        BrandSeries = urbanSeries
-                    },
                     new()
                     {
                         Name = "棕色橡木",

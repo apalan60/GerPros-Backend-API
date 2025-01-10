@@ -15,13 +15,13 @@ public class CloudFrontService : ICDNService
         _domainName = settings.Value.DomainName;
         _keyPairId = settings.Value.KeyPairId;
         _privateKey = settings.Value.PrivateKey;
-#if DEBUG
-        string? privateKeyPath = settings.Value.PrivateKeyPath;
-        if (!string.IsNullOrEmpty(privateKeyPath))
-        {
-            _privateKey = File.ReadAllText($"{privateKeyPath}");
-        }
-#endif
+// #if DEBUG
+//         string? privateKeyPath = settings.Value.PrivateKeyPath;
+//         if (!string.IsNullOrEmpty(privateKeyPath))
+//         {
+//             _privateKey = File.ReadAllText($"{privateKeyPath}");
+//         }
+// #endif
     }
 
 

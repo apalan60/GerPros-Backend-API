@@ -243,6 +243,46 @@
         ]
       }
     },
+    "/api/ContactForm/Send": {
+      "post": {
+        "tags": [
+          "ContactForm"
+        ],
+        "operationId": "SendMail",
+        "parameters": [
+          {
+            "name": "formData",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ContactForm"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "files": {
+                    "type": "array",
+                    "nullable": true,
+                    "items": {}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/FAQ": {
       "get": {
         "tags": [
@@ -1405,6 +1445,63 @@
             "format": "guid"
           },
           "name": {
+            "type": "string"
+          }
+        }
+      },
+      "ContactForm": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "lastName": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "customerTitle": {
+            "type": "string"
+          },
+          "companyName": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "customerType": {
+            "type": "string"
+          },
+          "contactTime": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "area": {
+            "type": "string"
+          },
+          "zipCode": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "serviceType": {
+            "type": "string"
+          },
+          "otherServiceType": {
+            "type": "string"
+          },
+          "knowMethod": {
+            "type": "string"
+          },
+          "otherKnowMethod": {
+            "type": "string"
+          },
+          "comment": {
             "type": "string"
           }
         }

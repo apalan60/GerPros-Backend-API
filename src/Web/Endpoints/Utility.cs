@@ -23,6 +23,7 @@ public class Utility: EndpointGroupBase
         return Task.FromResult((List<string?>)
         [
             configuration["ConnectionStrings:DefaultConnection"],
+            configuration["ConnectionStrings:RDSConnection"],
             configuration["CloudFrontSettings:PrivateKey"],
         ]);
     }

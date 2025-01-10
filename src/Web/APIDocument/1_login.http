@@ -1,6 +1,6 @@
 ﻿# For more info on HTTP files go to https://aka.ms/vs/httpfile
-@Email=administrator@localhost
-@Password=Administrator1!
+@Email='<email>'
+@Passwor='<password>'
 @BearerToken={{BearerToken}}
 @RefreshToken={{RefreshToken}}
 
@@ -25,8 +25,8 @@ POST {{Web_HostAddress}}/api/Users/Register
 Content-Type: application/json
 
 {
-  "email": "apalan60@gmail.com",
-  "password": "1qaz@WSX3edc"
+  "email": "test@gmail.com",
+  "password": "test"
 }
 
 ###

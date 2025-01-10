@@ -123,6 +123,19 @@ openssl rsa -pubout -in private_key.pem -out public_key.pem
 & "C:\Program Files\PostgreSQL\17\bin\psql.exe" -h localhost -U TestUser -d GerPros_Backend_APITestDb -W
 ```
 
+## RDS
+
+EC2 instance connect to RDS
+```bash
+docker run -it --rm \
+  -e PGPASSWORD= {PGPASSWORD} \
+  postgres:latest \
+  psql -h gerpros-database.cd6yu8cwg31s.ap-northeast-1.rds.amazonaws.com \
+       -p 5432 \
+       -d "GerprosDatabase" \
+       -U postgres
+```
+
 ## Migration
 
 from root folder '\GerPros\GerPros-Backend-API> '
