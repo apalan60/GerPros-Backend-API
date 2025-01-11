@@ -24,7 +24,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<Post> Posts => Set<Post>();
     
     public DbSet<PostTag> PostTags => Set<PostTag>();
-
+    public async Task<bool> GetHealthStatus() => await Database.CanConnectAsync();
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

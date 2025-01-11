@@ -11,5 +11,6 @@ public interface IApplicationDbContext
     DbSet<Tag> Tags { get; }
     DbSet<Post> Posts { get; }
     DbSet<PostTag> PostTags { get; }
+    Task<bool> GetHealthStatus();
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

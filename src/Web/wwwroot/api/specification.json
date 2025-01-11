@@ -1360,6 +1360,19 @@
           }
         }
       }
+    },
+    "/api/Utility/HealthCheck/Database": {
+      "get": {
+        "tags": [
+          "Utility"
+        ],
+        "operationId": "GetHealthStatus",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
     }
   },
   "components": {
