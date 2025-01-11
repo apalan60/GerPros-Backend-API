@@ -14,23 +14,24 @@ public class Utility: EndpointGroupBase
             .MapGet(GetHealthStatus, "HealthCheck/Database");
     }
 
-    public async Task<IResult> SeedDatabase(ISender sender, SeedDatabaseCommand command)
+    private static async Task<IResult> SeedDatabase(ISender sender)
     {
-        await sender.Send(command);
+        await sender.Send(new SeedDatabaseCommand());
         return Results.NoContent();
     }
-    
-    public Task<List<string?>> GetConfig(IConfiguration configuration)
+
+    private static Task<List<string?>> GetConfig(IConfiguration configuration)
     {
         return Task.FromResult((List<string?>)
         [
             configuration["ConnectionStrings:DefaultConnection"],
             configuration["ConnectionStrings:RDSConnection"],
             configuration["CloudFrontSettings:PrivateKey"],
+            configuration["SecretSettings:SecretKey"]
         ]);
     }
-    
-    public async Task<IResult> GetHealthStatus(IApplicationDbContext context)
+
+    private static async Task<IResult> GetHealthStatus(IApplicationDbContext context)
     {
         return await context.GetHealthStatus()? 
             Results.Ok("Database is healthy") : 

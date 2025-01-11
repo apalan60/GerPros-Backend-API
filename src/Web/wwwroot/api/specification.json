@@ -1319,18 +1319,6 @@
           "Utility"
         ],
         "operationId": "SeedDatabase",
-        "requestBody": {
-          "x-name": "command",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SeedDatabaseCommand"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
         "responses": {
           "200": {
             "description": ""
@@ -2103,10 +2091,6 @@
             "nullable": true
           }
         }
-      },
-      "SeedDatabaseCommand": {
-        "type": "object",
-        "additionalProperties": false
       }
     },
     "securitySchemes": {
