@@ -9,8 +9,12 @@ using static Testing;
 
 public class GetProductsTests : BaseTestFixture
 {
-    const string TestBrand = "Test Brand";
-    const string TestSeries = "Test Series 1-1";
+    const string TestBrand1 = "Test Brand";
+    const string TestSeries11 = "Test Series 1-1";
+    const string TestSeries12 = "Test Series 1-2";
+    
+    const string TestBrand2 = "Test Brand 2";
+    const string TestSeries21 = "Test Series 2-1";
     
     //Init
     [SetUp]
@@ -19,11 +23,14 @@ public class GetProductsTests : BaseTestFixture
         await RunAsDefaultUserAsync();
         
         //Create Brands
-        var brandId = await SendAsync(new CreateBrandCommand { Name = TestBrand });
+        var brandId = await SendAsync(new CreateBrandCommand { Name = TestBrand1 });
+        var brandSecond = await SendAsync(new CreateBrandCommand { Name = TestBrand2 });
         
         //Create Series
-        var seriesId = await SendAsync(new CreateSeriesCommand { BrandId = brandId, Name = TestSeries });
-        Guid seriesSecond = await SendAsync(new CreateSeriesCommand { BrandId = brandId, Name = "Test Series 1-2" });
+        var seriesId = await SendAsync(new CreateSeriesCommand { BrandId = brandId, Name = TestSeries11 });
+        Guid seriesSecond = await SendAsync(new CreateSeriesCommand { BrandId = brandId, Name = TestSeries12 });
+        
+        var seriesThird = await SendAsync(new CreateSeriesCommand { BrandId = brandSecond, Name = TestSeries21 });
         
         //Create Products
         await SendAsync(new CreateProductItemsCommand
@@ -53,27 +60,19 @@ public class GetProductsTests : BaseTestFixture
                     Price = 300,
                     Image = "test.jpg",
                     Detail = "Test Product 3 Detail"
+                },
+                new CreateProductItemDto
+                {
+                    SeriesId = seriesThird,
+                    Name = "Test Product 4",
+                    Price = 400,
+                    Image = "test.jpg",
+                    Detail = "Test Product 4 Detail"
                 }
             ] 
         }); 
     }
     
-    [Test]
-    public async Task ShouldReturnSpecificListsAndItems()
-    {
-        var query = new GetProductWithPaginationQuery
-        {
-            Brand = TestBrand, 
-            Series = TestSeries,
-            PageNumber = 1,
-            PageSize = 10
-        };
-        var result = await SendAsync(query);
-        result.Items.Should().HaveCount(3);
-        result.Items.Should().Contain(x => x.Name == "Test Product 1");
-        result.Items.Should().Contain(x => x.Name == "Test Product 2");
-        result.Items.Should().Contain(x => x.Name == "Test Product 3");
-    }
 
     [Test]
     public async Task ShouldReturnAllItems()
@@ -84,10 +83,11 @@ public class GetProductsTests : BaseTestFixture
             PageSize = 10
         };
         var result = await SendAsync(query);
-        result.Items.Should().HaveCount(3);
+        result.Items.Should().HaveCount(4);
         result.Items.Should().Contain(x => x.Name == "Test Product 1");
         result.Items.Should().Contain(x => x.Name == "Test Product 2");
         result.Items.Should().Contain(x => x.Name == "Test Product 3");
+        result.Items.Should().Contain(x => x.Name == "Test Product 4");
             
     }
     
@@ -106,4 +106,55 @@ public class GetProductsTests : BaseTestFixture
         
         await action.Should().NotThrowAsync<UnauthorizedAccessException>();
     }
+    
+    [Test]
+    public async Task ShouldFilterByBrandAndSeries()
+    {
+        //Brand and Series
+        var query = new GetProductWithPaginationQuery
+        {
+            Brand = TestBrand1,
+            Series = TestSeries11,
+            PageNumber = 1,
+            PageSize = 10
+        };
+        var result = await SendAsync(query);
+        result.Items.Should().HaveCount(2);
+        result.Items.Should().Contain(x => x.Name == "Test Product 1");
+        result.Items.Should().Contain(x => x.Name == "Test Product 2");
+    }
+    
+    //Brand
+    [Test]
+    public async Task ShouldFilterByBrand()
+    {
+        var query = new GetProductWithPaginationQuery
+        {
+            Brand = TestBrand1,
+            PageNumber = 1,
+            PageSize = 10
+        };
+        var result = await SendAsync(query);
+        result.Items.Should().HaveCount(3);
+        result.Items.Should().Contain(x => x.Name == "Test Product 1");
+        result.Items.Should().Contain(x => x.Name == "Test Product 2");
+        result.Items.Should().Contain(x => x.Name == "Test Product 3");
+    }
+    
+    //Series
+    [Test]
+    public async Task ShouldFilterBySeries()
+    {
+        var query = new GetProductWithPaginationQuery
+        {
+            Series = TestSeries11,
+            PageNumber = 1,
+            PageSize = 10
+        };
+        var result = await SendAsync(query);
+        result.Items.Should().HaveCount(2);
+        result.Items.Should().Contain(x => x.Name == "Test Product 1");
+        result.Items.Should().Contain(x => x.Name == "Test Product 2");
+    }
+    
 }

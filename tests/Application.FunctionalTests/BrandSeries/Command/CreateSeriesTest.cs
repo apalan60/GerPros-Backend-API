@@ -6,7 +6,7 @@ namespace GerPros_Backend_API.Application.FunctionalTests.BrandSeries.Command;
 
 using static Testing;
 
-public class CreateSeriesTest
+public class CreateSeriesTest : BaseTestFixture
 {
     [Test]
     public async Task ShouldRequireMinimumFields()

@@ -45,19 +45,30 @@ public class GetProductsWithPaginationQueryHandler(
             if (brandId == Guid.Empty)
                 return new PaginatedList<ProductItemDto>(new List<ProductItemDto>(), 0, 0, 0);
 
-            if (request.Series is null)
+            if (request.Series is not null)
             {
                 result = await GetPaginatedProductsAsync(
                     x => x.BrandSeries.BrandId == brandId && x.BrandSeries.Name == request.Series,
                     request.PageNumber,
                     request.PageSize);
             }
+            else
+            {
+                result = await GetPaginatedProductsAsync(
+                    x => x.BrandSeries.BrandId == brandId,
+                    request.PageNumber,
+                    request.PageSize);
+            }
+        }
 
+        if (request.Series is not null)
+        {
             result = await GetPaginatedProductsAsync(
-                x => x.BrandSeries.BrandId == brandId,
+                x => x.BrandSeries.Name == request.Series,
                 request.PageNumber,
                 request.PageSize);
         }
+
 
         if (request.Brand is null && request.Series is null)
         {
