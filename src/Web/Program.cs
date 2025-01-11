@@ -50,6 +50,7 @@ app.UseCors(corsPolicyName);
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    Console.WriteLine("Initialising database");
     await app.InitialiseDatabaseAsync();
 }
 else
