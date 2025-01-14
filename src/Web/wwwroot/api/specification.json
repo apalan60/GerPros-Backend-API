@@ -48,6 +48,16 @@
           "Brands"
         ],
         "operationId": "GetBrands",
+        "parameters": [
+          {
+            "name": "IsManager",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "x-position": 1
+          }
+        ],
         "responses": {
           "200": {
             "description": "",
