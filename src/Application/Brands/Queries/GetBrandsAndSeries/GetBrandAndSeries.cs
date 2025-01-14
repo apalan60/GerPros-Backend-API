@@ -13,15 +13,18 @@ public class GetBrandsAndSeriesQueryHandler : IRequestHandler<GetBrandsAndSeries
         _context = context;
     }
 
-    public async Task<IEnumerable<BrandDto>> Handle(GetBrandsAndSeriesQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<BrandDto>> Handle(GetBrandsAndSeriesQuery request,
+        CancellationToken cancellationToken)
     {
         var brandList = await _context.Brands
+            .AsNoTracking()
+            .AsSplitQuery() 
             .Include(x => x.BrandSeries)
-            .ThenInclude(x => x.ProductItems)
+            .ThenInclude(bs => bs.ProductItems)
             .Where(x => x.BrandSeries.Any(y => y.ProductItems.Count > 0))
             .Select(x => x.ToDto())
             .ToListAsync(cancellationToken);
-        
+
         return brandList;
     }
 }
