@@ -17,8 +17,11 @@ public class GetBrandsAndSeriesQueryHandler : IRequestHandler<GetBrandsAndSeries
     {
         var brandList = await _context.Brands
             .Include(x => x.BrandSeries)
+            .ThenInclude(x => x.ProductItems)
+            .Where(x => x.BrandSeries.Any(y => y.ProductItems.Count > 0))
             .Select(x => x.ToDto())
             .ToListAsync(cancellationToken);
+        
         return brandList;
     }
 }
