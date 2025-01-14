@@ -16,7 +16,9 @@ public class GetTagsQueryHandler : IRequestHandler<GetTagsQuery, string[]>
     public async Task<string[]> Handle(GetTagsQuery request, CancellationToken cancellationToken)
     {
         var tags = await _context.Tags
+            .Where(t => t.PostTags != null && t.PostTags.Count > 0)
             .Select(t => t.Name)
+            .Distinct()
             .ToArrayAsync(cancellationToken);
 
         return tags;
