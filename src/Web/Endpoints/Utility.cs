@@ -27,7 +27,8 @@ public class Utility: EndpointGroupBase
             configuration["ConnectionStrings:DefaultConnection"],
             configuration["ConnectionStrings:RDSConnection"],
             configuration["CloudFrontSettings:PrivateKey"],
-            configuration["SecretSettings:SecretKey"]
+            configuration["SecretSettings:SecretKey"],
+            configuration["SES:VerifiedSenderEmail"] 
         ]);
     }
 
