@@ -1,9 +1,10 @@
 ﻿using GerPros_Backend_API.Application.Common.Interfaces;
 
 namespace GerPros_Backend_API.Application.Brands;
-
-public class SeedDatabaseCommand : IRequest;
-
+public class SeedDatabaseCommand : IRequest
+{
+    public bool SeedSampleData { get; set; } = false;
+}
 
 public class SeedDatabaseCommandHandler : IRequestHandler<SeedDatabaseCommand>
 {
@@ -17,6 +18,8 @@ public class SeedDatabaseCommandHandler : IRequestHandler<SeedDatabaseCommand>
     public async Task Handle(SeedDatabaseCommand request, CancellationToken cancellationToken)
     {
         await _migrationService.MigrateAsync();
-        await _migrationService.SeedSampleDataAsync();
+        
+        if (request.SeedSampleData)
+            await _migrationService.SeedSampleDataAsync();
     }
 }
