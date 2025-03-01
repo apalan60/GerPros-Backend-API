@@ -9,7 +9,6 @@ public class BrandSeriesConfiguration : IEntityTypeConfiguration<BrandSeries>
     public void Configure(EntityTypeBuilder<BrandSeries> builder)
     {
         builder
-            .HasIndex(s => s.Name)
-            .IsUnique();
+            .HasIndex(s => s.Name);
     }
 }

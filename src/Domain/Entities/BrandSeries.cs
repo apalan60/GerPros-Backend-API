@@ -3,7 +3,8 @@
 public class BrandSeries : BaseAuditableEntity
 {
     /// <summary>
-    /// unique, non-clustering index
+    /// not unique, allow same name when brand is difference
+    /// non-clustering index
     /// </summary>
     public string Name { get; set; } = null!;
 

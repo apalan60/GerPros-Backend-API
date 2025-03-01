@@ -140,7 +140,7 @@ docker run -it --rm \
 
 from root folder '\GerPros\GerPros-Backend-API> '
 ```bash
-dotnet ef migrations add "UpdatePostImageUrlMaxLength" --project src/Infrastructure --startup-project src/Web --output-dir Data/Migrations
+dotnet ef migrations add "allowSameSeriesName" --project src/Infrastructure --startup-project src/Web --output-dir Data/Migrations
 
 ```
 

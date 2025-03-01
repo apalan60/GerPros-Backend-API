@@ -12,7 +12,7 @@ public class CreateSeriesCommandValidator : AbstractValidator<CreateSeriesComman
         RuleFor(v => v.Name)
             .NotNull().WithMessage("Name is required.")
             .NotEmpty().WithMessage("Name is required.")
-            .MustAsync(BeUniqueName)
+            .MustAsync(BeUniqueNameWhenSameBrand)
             .WithMessage("'{PropertyName}' must be unique.")
             .WithErrorCode("Unique");
         RuleFor(v => v.BrandId)
@@ -20,8 +20,8 @@ public class CreateSeriesCommandValidator : AbstractValidator<CreateSeriesComman
             .WithMessage("Brand with id {PropertyValue} does not exist.");
     }
 
-    private async Task<bool> BeUniqueName(CreateSeriesCommand command, string name, CancellationToken cancellationToken) => 
-        await _context.BrandSeries.AllAsync(l => l.Name != name, cancellationToken);
+    private async Task<bool> BeUniqueNameWhenSameBrand(CreateSeriesCommand command, string name, CancellationToken cancellationToken) => 
+        await _context.BrandSeries.AnyAsync(l => l.BrandId == command.BrandId && l.Name == name, cancellationToken) == false;
     
 
     private async Task<bool> ShouldExistBrand(CreateSeriesCommand command, Guid brandId, CancellationToken cancellationToken) => 

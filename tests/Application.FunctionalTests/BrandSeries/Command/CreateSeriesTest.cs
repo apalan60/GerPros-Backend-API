@@ -48,4 +48,41 @@ public class CreateSeriesTest : BaseTestFixture
         series.Should().NotBeNull();
         series!.Name.Should().Be(command.Name);
     }
+
+    [Test]
+    public async Task ShouldAllowedDuplicateSeriesNameIfBrandIsDifference()
+    {
+        var brandId = await SendAsync(new CreateBrandCommand
+        {
+            Name = "BrandA"
+        }); 
+        
+        var brandId2 = await SendAsync(new CreateBrandCommand
+        {
+            Name = "BrandB"
+        });
+        
+        var command = new CreateSeriesCommand
+        {
+            BrandId = brandId,
+            Name = "SeriesA"
+        };
+        
+        await SendAsync(command);
+        
+        var differenceBrandCommand = new CreateSeriesCommand
+        {
+            BrandId = brandId2,
+            Name = "SeriesA"
+        };
+        
+        var sameBrandCommand = new CreateSeriesCommand
+        {
+            BrandId = brandId,
+            Name = "SeriesA"
+        };
+        
+        Assert.DoesNotThrowAsync(() => SendAsync(differenceBrandCommand));
+        Assert.ThrowsAsync(typeof(ValidationException), () => SendAsync(sameBrandCommand));
+    }
 }
