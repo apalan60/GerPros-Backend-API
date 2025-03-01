@@ -21,7 +21,7 @@ public class GetBrandsTests : BaseTestFixture
         await SendAsync(new CreateSeriesCommand { BrandId = id2, Name = "Test Series 2-1" });
         await SendAsync(new CreateSeriesCommand { BrandId = id2, Name = "Test Series 2-2" });
 
-        var query = new GetBrandsAndSeriesQuery();
+        var query = new GetBrandsAndSeriesQuery(IsManager: true);
         var result = await SendAsync(query);
 
         IEnumerable<BrandDto> brandDtos = result as BrandDto[] ?? result.ToArray();
