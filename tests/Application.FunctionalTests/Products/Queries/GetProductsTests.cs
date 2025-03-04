@@ -156,5 +156,46 @@ public class GetProductsTests : BaseTestFixture
         result.Items.Should().Contain(x => x.Name == "Test Product 1");
         result.Items.Should().Contain(x => x.Name == "Test Product 2");
     }
-    
+
+    [Test]
+    public async Task ShouldGetSpecificProductItemsWhenSeriesNameAreSame()
+    {
+        var brand3 = await SendAsync(new CreateBrandCommand { Name = "Brand 3" });
+        var sameNameSeries = await SendAsync(new CreateSeriesCommand { BrandId = brand3, Name = TestSeries12 });
+        await SendAsync(new CreateProductItemsCommand
+        {
+            Items = 
+            [
+                new CreateProductItemDto
+                {
+                    SeriesId = sameNameSeries,
+                    Name = "Test Product 5",
+                    Price = 500,
+                    Image = "test.jpg",
+                    Detail = "Test Product 5 Detail"
+                },
+                new CreateProductItemDto
+                {
+                    SeriesId = sameNameSeries,
+                    Name = "Test Product 6",
+                    Price = 600,
+                    Image = "test.jpg",
+                    Detail = "Test Product 6 Detail"
+                }
+            ] 
+        });
+        
+        
+        //Assert
+        var query = new GetProductWithPaginationQuery
+        {
+            Brand = "Brand 3",
+            Series = TestSeries12,
+            PageNumber = 1,
+            PageSize = 10
+        };
+        var result = await SendAsync(query);
+        result.Items.Should().HaveCount(2);
+    }
+
 }
