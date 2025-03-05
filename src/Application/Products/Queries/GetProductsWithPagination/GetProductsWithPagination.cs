@@ -68,8 +68,19 @@ public class GetProductsWithPaginationQueryHandler(IApplicationDbContext context
                 request.PageSize);
         }
 
-        if (result is null)
-            throw new Exception("Invalid query parameters, please provide either BrandId and SeriesId or Brand and Series or Brand or none.");
+        if (request.Series is not null && request.Brand is null)
+        {
+            result = await GetPaginatedProductsAsync(
+                x => x.BrandSeries.Name == request.Series,
+                request.PageNumber,
+                request.PageSize);
+        }
+        
+        
+        if (result == null)
+        {
+           return new PaginatedList<ProductItemDto>(new List<ProductItemDto>(), 0, 0, 0); 
+        }
 
         foreach (var item in result.Items)
         {
@@ -78,7 +89,8 @@ public class GetProductsWithPaginationQueryHandler(IApplicationDbContext context
                 item.Image = await fileStorageService.GetUrlAsync(item.Image, FileCategory.Product, DateTime.UtcNow.AddMinutes(30));
             }
         }
-        return result ?? throw new Exception("Invalid query parameters, please provide either BrandId and SeriesId or Brand and Series or Brand or none.");
+
+        return result;
     }
 
     private async Task<PaginatedList<ProductItemDto>> GetPaginatedProductsAsync(
